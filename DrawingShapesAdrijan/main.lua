@@ -22,6 +22,8 @@ myTriangle = display.newPolygon(display.contentWidth/2, display.contentHeight/4,
 
 --set the colour
 myTriangle:setFillColor( 255/255, 0/255, 0/255)
+myTriangle.strokeWidth = 10
+myTriangle:setStrokeColor( 0/255, 0/255, 0/255)
 
 -- making myRectangle's vertices, fillcolour, stroke colour and stroke size.
 local myRectangle = display.newRect( 512, 360, 50, 150)
@@ -44,6 +46,8 @@ local hexagonVertices = { -10,30, 10,30, 40,0, 10,-30, -10,-30, -40,0}
 --making myHexagon
 local myHexagon = display.newPolygon( 512,500, hexagonVertices)
 myHexagon:setFillColor( 255/255, 248/255, 245/255)
+myHexagon.strokeWidth = 10
+myHexagon:setStrokeColor( 0/255, 0/255, 0/255)
 
 --maikng my random shape 
 local randomShapeVertices = {100,-40, 140,-80, 180,-40, 220,-80, 260,-40, 300,-80, 340,-40, 340,20, -340,20, -340,-40, -300,-80,-260,-40, -220,-80, -180,-40, -140,-80,-100,-40}
@@ -57,3 +61,7 @@ local polygonGradient = {
 
 --setting the gradient to the polygon
 myPolygon.fill = polygonGradient
+
+--setting the border
+myPolygon.strokeWidth = 8
+myPolygon:setStrokeColor( 255/255, 255/255, 255/255)
