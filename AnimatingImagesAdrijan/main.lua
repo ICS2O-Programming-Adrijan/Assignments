@@ -11,6 +11,83 @@ display.setStatusBar(display.HiddenStatusBar)
 local backgroundImage = display.newImageRect( "Images/FamilyGuy.png", 1024, 1000)
 backgroundImage.x = 512
 backgroundImage.y = 359
+backgroundImage.alpha = 1
 
-local Peter = display.newImageRect("Images/PeterPimp.png",200, 400)
-Peter.x = 
+--Making Peter
+local Peter = display.newImageRect("Images/PeterPimp.png",100, 200)
+Peter.x = 100
+Peter.y = 600
+
+--making Mike
+local Mike = display.newImageRect("Images/Mike.png", 300, 500)
+Mike.x = 880
+Mike.y = 580
+
+local Spongebob = display.newImageRect("Images/Spongebob.png",100, 200)
+Spongebob.x = 30
+Spongebob.y = 670
+
+--Making the Polygon/Lazer
+local Lazer = display.newLine( 30, 670, 880, 450 )
+Lazer.alpha = 1
+Lazer.strokeWidth = 12
+Lazer:setStrokeColor(255/255, 0/255, 0/255)
+
+local textSize = 40
+
+--Create text
+local zapText = display.newText("Mike finally found Spongebob and Peter, he tried to  \n zap him with his lazer but they just got away", 0, 0, Arial, textSize)
+zapText.x = 500
+zapText.y = 50
+zapText:setFillColor(255/255, 0/255, 0/255)
+zapText.alpha = 1
+
+--global variable
+scrollSpeed = -10
+
+-- Function: MoveSponge
+--Input: this function accepts an event listener
+--Output: none 
+--Description This function adds the scroll speed to the x-value of Spongebob
+local function Zap(event)
+    -- change the transparentcy of the lazer so it zaps Spongebob
+	Lazer.alpha = Lazer.alpha - 0.1
+	--display the writing
+	zapText.alpha = zapText.alpha - 0.000001
+	
+end
+
+--Zap will be called over and over again
+Runtime:addEventListener("enterFrame", Zap)
+
+
+
+local function MoveSponge (event)
+      -- add the scroll speed to the x-value of the ship
+	    Spongebob.y = Spongebob.y + scrollSpeed	
+	   Spongebob:rotate( 20 )
+end
+
+--MoveSponge will be called over and over again
+Runtime:addEventListener("enterFrame", MoveSponge)
+
+--adding the next background
+local barBackground = display.newImageRect("Images/Bar.png", 1024, 768)
+barBackground.alpha = -1
+barBackground.x = 512
+barBackground.y = 359
+
+--setting peterScrollSpeed
+local peterScrollSpeed = 2
+local function MovePeter(event)
+		Peter.x = Peter.x + peterScrollSpeed
+	   Peter.y = Peter.y + (peterScrollSpeed - 3)
+	  Peter.alpha = Peter.alpha - 0.001
+	
+      
+end
+
+--MovePeter will be called over and over again
+Runtime:addEventListener("enterFrame", MovePeter)
+
+
