@@ -17,6 +17,12 @@ backgroundImage.x = 512
 backgroundImage.y = 359
 backgroundImage.alpha = 1
 
+--adding the next background
+local barBackground = display.newImageRect("Images/Bar.png", 1024, 780)
+barBackground.isVisible = false
+barBackground.x = 512
+barBackground.y = 390
+
 --Making Peter
 local Peter = display.newImageRect("Images/PeterPimp.png",100, 200)
 Peter.x = 100
@@ -49,17 +55,16 @@ zapText:setFillColor(255/255, 0/255, 0/255)
 zapText.alpha = 1
 
 --global variable
-scrollSpeed = -10
+scrollSpeed = -12
 
---adding the next background
-local barBackground = display.newImageRect("Images/Bar.png", 1024, 780)
-barBackground.isVisible = false
-barBackground.x = 512
-barBackground.y = 390
+
 
 --setting peterScrollSpeed
 local peterScrollSpeed = 2
 
+--add the zap noise
+local zapNoise = audio.loadSound("Sounds/Zap.mp3")
+local zapNoiseChannel
 --------------------------------------------------------------
 -- LOCAL FUNCTIONS
 -------------------------------------------------------------
@@ -72,14 +77,16 @@ local function Zap(event)
     -- change the transparentcy of the lazer so it zaps Spongebob
 	Lazer.alpha = Lazer.alpha - 0.1
 	--display the writing
-	zapText.alpha = zapText.alpha - 0.00001
+	zapText.alpha = zapText.alpha - 0.0000001
+	zapNoiseChannel = audio.play( zapNoise, {duration=3000} )
 	
 end
 
 local function MoveSponge (event)
     -- add the scroll speed to the x-value of the ship
 	Spongebob.y = Spongebob.y + scrollSpeed	
-	Spongebob:rotate( 20 )
+	Spongebob.x = Spongebob.x - scrollSpeed
+	Spongebob:rotate( 35 )
 end
 
 local function MovePeter(event)
@@ -102,6 +109,17 @@ local function changeBackgroundDelay()
 	Runtime:removeEventListener("enterFrame", MovePeter)
 	backgroundImage.isVisible = false
 	barBackground.isVisible = true
+	Peter.x = 200
+	Peter.y = 600
+	Peter.isVisible = true
+	Peter.alpha = 1
+	zapText.isVisible = false
+end
+
+local function zapPeter ()
+	Runtime:addEventListener("enterFrame", Zap)
+	Lazer.isVisible = true
+	Lazer.alpha = 1
 end
 
 --------------------------------------------------------------
@@ -117,3 +135,5 @@ timer.performWithDelay(1000, MovePeterDelay)
 
 
 timer.performWithDelay(4000, changeBackgroundDelay)
+
+timer.performWithDelay(5000, zapPeter)
