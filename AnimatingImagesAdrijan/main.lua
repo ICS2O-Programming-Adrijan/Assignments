@@ -33,6 +33,7 @@ local Mike = display.newImageRect("Images/Mike.png", 300, 500)
 Mike.x = 880
 Mike.y = 580
 
+--Making Spongebob
 local Spongebob = display.newImageRect("Images/Spongebob.png",100, 200)
 Spongebob.x = 30
 Spongebob.y = 670
@@ -43,9 +44,10 @@ Lazer.alpha = 1
 Lazer.strokeWidth = 12
 Lazer:setStrokeColor(255/255, 0/255, 0/255)
 
+--Setting text size for all texts
 local textSize = 45
 
---Create text
+--Creating the first text 
 local zapText = display.newText("Mike finally found Spongebob and "
 	.. "Peter, he tried to  \n zap him with his lazer but they just"
 	.. " got away", 0, 0, Arial, textSize)
@@ -54,10 +56,19 @@ zapText.y = 50
 zapText:setFillColor(255/255, 0/255, 0/255)
 zapText.alpha = 1
 
---global variable
-scrollSpeed = -12
+--Setting the scrollSpeed
+scrollSpeed = -13
+
+--Making the second text
+local peterZapText = display.newText("Mike finally found Peter and zapped him with \n his shrink ray.", 0, 0, Arial, textSize )
+peterZapText.x = 525
+peterZapText.y = 50
+peterZapText:setFillColor(255/255, 0/255, 0/255)
+peterZapText.alpha = 0
 
 
+--making mikescrollSpeed
+local mikescrollSpeed = 1
 
 --setting peterScrollSpeed
 local peterScrollSpeed = 2
@@ -68,6 +79,28 @@ local zapNoiseChannel
 --------------------------------------------------------------
 -- LOCAL FUNCTIONS
 -------------------------------------------------------------
+--function: MovingLeft
+--Output: this function acceptsthe event listener
+--input: none
+--Description: It makes Mike move side to side 
+MovingLeft = true
+
+local function MoveLeft(event)
+	if (movingLeft == true) then
+		Mike.x = Mike.x - mikescrollSpeed
+	else 
+		Mike.x = Mike.x + mikescrollSpeed
+
+	end
+
+	if (Mike.x < 860) then
+		movingLeft = false
+	end
+
+	if (Mike.x > 900) then
+		movingLeft = true
+	end
+end
 
 -- Function: MoveSponge
 --Input: this function accepts an event listener
@@ -82,6 +115,11 @@ local function Zap(event)
 	
 end
 
+
+--Function: MoveSponge
+--Input: this function accepts an event listener
+--Output: none
+--Description: Spongebob gets moved Diagonally and spins after he gets zapped
 local function MoveSponge (event)
     -- add the scroll speed to the x-value of the ship
 	Spongebob.y = Spongebob.y + scrollSpeed	
@@ -89,12 +127,20 @@ local function MoveSponge (event)
 	Spongebob:rotate( 35 )
 end
 
+--Function: MovePeter
+--Input: this function accepts an event listener
+--Output: none
+--Description: peter moves Diagonally and fades out 
 local function MovePeter(event)
 	Peter.x = Peter.x + peterScrollSpeed
 	Peter.y = Peter.y + (peterScrollSpeed - 3)
 	Peter.alpha = Peter.alpha - 0.001
 end
 
+--Function: MovePeterDelay
+--Input: this function accepts an event listener
+--Output: none
+--Description: This sets MovePeter to happen with a delay 
 local function MovePeterDelay()
 	--MovePeter will be called over and over again
 	Runtime:removeEventListener("enterFrame", Zap)
@@ -103,7 +149,12 @@ local function MovePeterDelay()
 end
 
 
-
+--Function: changeBackgroundDelay
+--Input: this function accepts an event listener
+--Output: none
+--Description: this changes the background on queue,
+-- and sets peter to position for the next scene
+-- 
 local function changeBackgroundDelay()
 	--MovePeter will be called over and over again
 	Runtime:removeEventListener("enterFrame", MovePeter)
@@ -115,12 +166,26 @@ local function changeBackgroundDelay()
 	Peter.alpha = 1
 	zapText.isVisible = false
 end
-
-local function zapPeter ()
-	Runtime:addEventListener("enterFrame", Zap)
+--Function; zapPeter
+--Input:this function accepts an event listener
+--Output: none
+--Description: this adds the lazer again,
+-- shrinks peter, and set the position of Mike
+local function zapPeter(event)
+	Runtime:removeEventListener("enterFrame", MoveLeft)
+	Mike.x = 880
+	Mike.y = 580
 	Lazer.isVisible = true
 	Lazer.alpha = 1
+	Peter.xScale = Peter.xScale - 0.5
+	Peter.yScale = Peter.yScale - 0.5
+	peterZapText.alpha = peterZapText.alpha + 1
+	
 end
+
+	
+
+
 
 --------------------------------------------------------------
 -- FUNCTION CALLS
@@ -131,9 +196,14 @@ Runtime:addEventListener("enterFrame", Zap)
 --MoveSponge will be called over and over again
 Runtime:addEventListener("enterFrame", MoveSponge)
 
+--MovePeterDelay will delay this Function by 1 second
 timer.performWithDelay(1000, MovePeterDelay)
 
-
+-- changeBackgroundDelay will delay the Function by 4 seconds 
 timer.performWithDelay(4000, changeBackgroundDelay)
 
+--zapPeter will play the Function with a delay of 5 seconds
 timer.performWithDelay(5000, zapPeter)
+
+--MoveLeft will be called over and over again
+Runtime:addEventListener("enterFrame", MoveLeft)
