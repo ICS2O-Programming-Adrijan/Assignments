@@ -1,0 +1,351 @@
+-----------------------------------------------------------------------------------------
+--Name: Adrijan
+-- main.lua
+--ICS20
+--This program will display a math
+-- problem for the user to answer with a time limit
+-----------------------------------------------------------------------------------------
+
+-- hide the status bar
+display.setStatusBar(display.HiddenStatusBar)
+
+--set the background 
+display.setDefault("background", 50/255, 175/255, 150/255)
+
+---------------------------------------------------------------------
+--LOCAL VARIABLES
+---------------------------------------------------------------------
+
+--creating the local variables
+local thanos2
+local questionObject
+local correctObject
+local numericField
+local randomNumber1
+local randomNumber2
+local userAnswer
+local correctText
+local incorrectText
+local points
+local Bowser
+local corona
+local mushroom
+local plankton
+local thanos
+local liveNumber
+local heart1
+local heart2
+local heart3
+local gameOverObject
+local winnerObject
+local randomOperator
+local correctAnswer
+local thanosScrollSpeed
+
+
+----------------------------------------------------------------
+--LOCAL FUNCTION
+--------------------------------------------------------------------------
+
+local function askQuestion()
+
+	-- pick a random number between 1 and 5
+	randomOperator = math.random(1,3)
+
+	if (randomOperator == 1) then
+		--setting the random numbers if it is a addition question
+		randomNumber1 = math.random(1,20)
+		randomNumber2 = math.random(1,20)
+
+		--setting the correct answer 
+		correctAnswer = randomNumber1 + randomNumber2
+
+		--asking the addition question
+		questionObject.text = randomNumber1 .. " + " .. randomNumber2 .. " = "
+	elseif (randomOperator == 2) then
+		--set the new random numbers
+		randomNumber1 = math.random(1,20)
+		randomNumber2 = math.random(1,20)
+
+		if (randomNumber1 > randomNumber2) then
+			correctAnswer = randomNumber1 - randomNumber2
+			questionObject.text = randomNumber1 .. " - " .. randomNumber2 .. " = "
+		else correctAnswer = randomNumber2 - randomNumber1
+			questionObject.text = randomNumber2 .. " - " .. randomNumber1 .. " = "
+		end
+	elseif (randomOperator == 3) then
+		--set the random numbers
+		randomNumber1 = math.random(1,10)
+		randomNumber2 = math.random(1,10)
+
+		--set the correct answer
+		correctAnswer = randomNumber1 * randomNumber2
+
+		--displaying the question
+		questionObject.text = randomNumber1 .. "*" .. randomNumber2 .. "="
+	end
+end
+
+local function numericFieldListener(event)
+
+	--user begins editing "numericField"
+	if ( event.phase == "began" ) then
+
+		--clear text field
+		event.target.text = ""
+
+	elseif event.phase == "submitted" then
+
+		--when the answer is submitted (enter key is pressed) set user input to user's answer
+		userAnswer = tonumber(event.target.text)
+
+		--if the user answer and the correct answer are the same:
+		if (userAnswer == correctAnswer) then
+			--give the user a point if they get the correct answer
+			points = points + 1
+			incorrectText.isVisible = false
+			correctText.isVisible = true
+			timer.performWithDelay(1000, HideCorrect)
+			event.target.text = ""
+			askQuestion()
+
+
+
+		else 
+			-- taking away the hearts
+			liveNumber = liveNumber - 1
+			incorrectText.isVisible = true
+			correctText.isVisible = false
+			event.target.text = ""
+			askQuestion()
+
+			
+
+		end
+	end
+end
+
+
+
+
+
+
+movingLeft = true
+
+local function MoveLeft(event)
+	
+	
+	
+	if (movingLeft == true) then
+		thanos.x = thanos.x - scrollSpeed
+	else 
+		thanos.x = thanos.x + scrollSpeed
+
+	end
+
+	if (thanos.x < 180) then
+		movingLeft = false
+	end
+
+	if (thanos.x > 220 ) then
+		movingLeft = true
+	end
+end
+
+local function heartNumber(event)
+	
+
+	if (liveNumber == 2) then
+		heart1.isVisible = false
+
+	elseif (liveNumber == 1) then
+		heart1.isVisible = false
+		heart2.isVisible = false
+
+	elseif (liveNumber == 0) then
+		heart1.isVisible = false
+		heart2.isVisible = false
+		heart3.isVisible = false
+		gameOverObject.isVisible = true	
+		questionObject.isVisible = false
+		numericField.isVisible = false
+		pointsText.isVisible = false
+		correctObject.isVisible = false
+		incorrectObject.isVisible = false
+	end
+end
+
+local function pointsCounter(event)
+	if (points == 1) then
+		bowser.y = bowser.y - bowserScrollSpeed
+		bowser:rotate(25)
+	elseif (points == 2) then
+		corona.x = corona.x + bowserScrollSpeed
+		corona.y = corona.y + bowserScrollSpeed
+	elseif (points == 3) then
+		mushroom.x = mushroom.x + bowserScrollSpeed
+		mushroom.alpha = mushroom.alpha - 0.05
+
+	elseif (points == 4) then
+		plankton.xScale = plankton.xScale - 0.5
+		plankton.yScale = plankton.yScale - 0.5
+		plankton.alpha = plankton.alpha - 0.01
+	elseif (points == 5) then
+		thanos.invisible = false
+		winnerObject.isVisible = true
+		incorrectText.isVisible = false
+		questionObject.isVisible = false
+		numericField.isVisible = false
+		correctText.isVisible = false
+		heart3.isVisible = false
+		heart1.isVisible = false
+		heart2.isVisible = false
+		thanos = display.newImageRect("Images/thanos2.png", 300, 500)
+		thanos.x = 750
+		thanos.y = 300
+		display.setDefault("background", 255/255, 255/255, 255/255)
+	end
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------------------------------------------------------------------
+--OBJECT CREATION
+------------------------------------------------------------------
+
+--display a question and sets the color
+questionObject = display.newText("", display.contentWidth/3, display.contentHeight/2, arial, 100 )
+questionObject:setTextColor(155/255, 42/255, 198/255)
+
+--create the correct text object and make it invisible
+correctText = display.newText( "Correct!", display.contentWidth/2, display.contentHeight*2/3, nil, 50 )
+correctText:setTextColor(155/255, 42/255, 198/255)
+correctText.alpha = 0
+incorrectText = display.newText("Incorrect!", display.contentWidth/2, display.contentHeight*2/3, nil, 50 )
+incorrectText.alpha = 0
+
+--create numeric field
+numericField = native.newTextField( 700, display.contentHeight/2, 200, 120 )
+numericField.inputType = "number"
+
+points = 0
+
+
+-- creating heart1
+heart1 = display.newImageRect("Images/heart.png", 200, 150)
+heart1.x = 100
+heart1.y = 100
+
+-- creating heart2
+heart2 = display.newImageRect("Images/heart.png", 200, 150)
+heart2.x = 300
+heart2.y = 100
+
+-- creating heart3
+heart3 = display.newImageRect("Images/heart.png", 200, 150)
+heart3.x = 500
+heart3.y = 100
+
+-- creating the number of lives
+liveNumber = 3
+
+--creating the object that displays then the user loses the game 
+gameOverObject = display.newImageRect("Images/gameOver.png", 700, 700)
+gameOverObject.isVisible = false
+gameOverObject.x = display.contentHeight/2
+gameOverObject.y = display.contentWidth/2
+
+--creating the object that displays when the user wins thr game 
+winnerObject = display.newImageRect("Images/winner.png", 500, 500)
+winnerObject.isVisible = false
+winnerObject.x = display.contentHeight/2
+winnerObject.y = display.contentWidth/4
+
+
+
+--displaying the villains
+bowser = display.newImageRect("Images/bowser.png", 200, 300)
+bowser.x = 950
+bowser.y = 620
+bowser.isVisible = true
+
+corona = display.newImageRect("Images/corona.png", 200, 200)
+corona.x = 750
+corona.y = 650
+corona.isVisible = true
+
+mushroom = display.newImageRect("Images/mushroom.png", 150, 230)
+mushroom.x = 560
+mushroom.y = 650
+mushroom.isVisible = true
+
+plankton = display.newImageRect("Images/plankton.png", 100, 200)
+plankton.x = 400
+plankton.y = 665
+plankton.isVisible = true
+
+thanos = display.newImageRect("Images/thanos.png", 200, 390)
+thanos.x = 200
+thanos.y = 610
+thanos.isVisible = true
+
+scrollSpeed = 2
+
+bowserScrollSpeed = 10
+
+--creating the thanos that apears when the user wins
+thanos2 = display.newImageRect("Images/thanos2.png", 300, 500)
+thanos2.x = 750
+thanos2.y = 300
+thanos2.isVisible = false
+
+
+
+-------------------------------------------------------------------
+--FUNCTION CALLS
+--------------------------------------------------------------------
+
+--call the function to ask the question
+askQuestion()
+
+--MoveLeft will be called over and over again
+Runtime:addEventListener("enterFrame", MoveLeft)
+
+--add the event listener for the numeric field
+numericField:addEventListener( "userInput", numericFieldListener )
+
+-- added event heartNumber
+Runtime:addEventListener("enterFrame", heartNumber)
+
+--added event pointsCounter
+Runtime:addEventListener("enterFrame", pointsCounter)
+
+
+
+
+
