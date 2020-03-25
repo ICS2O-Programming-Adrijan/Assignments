@@ -41,6 +41,7 @@ local winnerObject
 local randomOperator
 local correctAnswer
 local thanosScrollSpeed
+local randomNumber3
 
 
 ----------------------------------------------------------------
@@ -49,8 +50,10 @@ local thanosScrollSpeed
 
 local function askQuestion()
 
+
+
 	-- pick a random number between 1 and 5
-	randomOperator = math.random(1,3)
+	randomOperator = math.random(1,5)
 
 	if (randomOperator == 1) then
 		--setting the random numbers if it is a addition question
@@ -83,6 +86,19 @@ local function askQuestion()
 
 		--displaying the question
 		questionObject.text = randomNumber1 .. "*" .. randomNumber2 .. "="
+	elseif (randomOperator == 4) then
+		randomNumber1 = math.random(1,10)
+		randomNumber2 = math.random(1,10)
+		randomNumber3 = math.random(1,10)
+
+		correctAnswer = randomNumber1 + randomNumber2 + randomNumber3
+
+		questionObject.text = randomNumber1 .. " + " .. randomNumber2 .. " + " .. randomNumber3 .. " = "
+	elseif (randomOperator == 5) then
+		randomNumber1 = math.random(1,20)
+
+		
+		
 	end
 end
 
@@ -169,9 +185,8 @@ local function heartNumber(event)
 		gameOverObject.isVisible = true	
 		questionObject.isVisible = false
 		numericField.isVisible = false
-		pointsText.isVisible = false
-		correctObject.isVisible = false
-		incorrectObject.isVisible = false
+		correctText.isVisible = false
+		incorrectText.isVisible = false
 	end
 end
 
@@ -191,7 +206,7 @@ local function pointsCounter(event)
 		plankton.yScale = plankton.yScale - 0.5
 		plankton.alpha = plankton.alpha - 0.01
 	elseif (points == 5) then
-		thanos.invisible = false
+		thanos.isVisible = false
 		winnerObject.isVisible = true
 		incorrectText.isVisible = false
 		questionObject.isVisible = false
@@ -202,7 +217,8 @@ local function pointsCounter(event)
 		heart2.isVisible = false
 		thanos = display.newImageRect("Images/thanos2.png", 300, 500)
 		thanos.x = 750
-		thanos.y = 300
+		thanos.y = 600
+		thanos:rotate(45)
 		display.setDefault("background", 255/255, 255/255, 255/255)
 	end
 end
@@ -243,11 +259,15 @@ questionObject = display.newText("", display.contentWidth/3, display.contentHeig
 questionObject:setTextColor(155/255, 42/255, 198/255)
 
 --create the correct text object and make it invisible
-correctText = display.newText( "Correct!", display.contentWidth/2, display.contentHeight*2/3, nil, 50 )
-correctText:setTextColor(155/255, 42/255, 198/255)
-correctText.alpha = 0
-incorrectText = display.newText("Incorrect!", display.contentWidth/2, display.contentHeight*2/3, nil, 50 )
-incorrectText.alpha = 0
+correctText = display.newText( "Correct!", 700, 250, nil, 50 )
+correctText:setTextColor(200/255, 250/255, 20/255)
+correctText.isVisible = false
+
+--making the incorrectText
+incorrectText = display.newText("Incorrect!", 700, 300, nil, 50 )
+incorrectText.isVisible = false
+incorrectText:setTextColor(200/255, 250/255, 20/255)
+
 
 --create numeric field
 numericField = native.newTextField( 700, display.contentHeight/2, 200, 120 )
@@ -277,8 +297,8 @@ liveNumber = 3
 --creating the object that displays then the user loses the game 
 gameOverObject = display.newImageRect("Images/gameOver.png", 700, 700)
 gameOverObject.isVisible = false
-gameOverObject.x = display.contentHeight/2
-gameOverObject.y = display.contentWidth/2
+gameOverObject.x = 500
+gameOverObject.y = 400
 
 --creating the object that displays when the user wins thr game 
 winnerObject = display.newImageRect("Images/winner.png", 500, 500)
