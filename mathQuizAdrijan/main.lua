@@ -47,6 +47,22 @@ local secondsLeft = 10
 local clockText
 local countDownTimer
 
+-------------------------------------------------------------
+--SOUNDS
+--------------------------------------------------------------
+--correct sound 
+local correctSound = audio.loadSound("Sounds/correct.mp3")
+local correctSoundChannel
+
+local winnerSound = audio.loadSound("Sounds/winner.wav")
+local winnerSoundChannel
+
+local gameOverSound = audio.loadSound("Sounds/Loser.mp3")
+local gameOverSoundChannel
+
+local wrongSound = audio.loadSound("Sounds/wrong.wav")
+local wrongSoundChannel
+
 ----------------------------------------------------------------
 --LOCAL FUNCTION
 --------------------------------------------------------------------------
@@ -131,7 +147,7 @@ local function numericFieldListener(event)
 
 		--if the user answer and the correct answer are the same:
 		if (userAnswer == correctAnswer) then
-		
+			correctSoundChannel = audio.play(correctSound)
 			--give the user a point if they get the correct answer
 			points = points + 1
 			incorrectText.isVisible = false
@@ -140,7 +156,7 @@ local function numericFieldListener(event)
 			event.target.text = ""
 			askQuestion()
 		else 
-			
+			wrongSoundChannel = audio.play(wrongSoundChannel)
 			-- taking away the hearts
 			liveNumber = liveNumber - 1
 			incorrectText.isVisible = true
@@ -183,12 +199,11 @@ local function heartNumber(event)
 
 	if (liveNumber == 2) then
 		heart1.isVisible = false
-
 	elseif (liveNumber == 1) then
 		heart1.isVisible = false
 		heart2.isVisible = false
-
 	elseif (liveNumber == 0) then
+		gameOverSoundChannel = audio.play(gameOverSound)
 		timer.cancel(countDownTimer)
 		heart1.isVisible = false
 		heart2.isVisible = false
@@ -217,6 +232,7 @@ local function pointsCounter(event)
 		plankton.yScale = plankton.yScale - 0.5
 		plankton.alpha = plankton.alpha - 0.01
 	elseif (points == 5) then
+		winnerSoundChannel = audio.play(winnerSound)
 		timer.cancel(countDownTimer)
 		thanos.isVisible = false
 		winnerObject.isVisible = true
