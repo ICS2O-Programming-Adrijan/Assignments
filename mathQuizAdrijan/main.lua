@@ -42,7 +42,10 @@ local randomOperator
 local correctAnswer
 local thanosScrollSpeed
 local randomNumber3
-
+local totalSeconds = 10
+local secondsLeft = 10
+local clockText
+local countDownTimer
 
 ----------------------------------------------------------------
 --LOCAL FUNCTION
@@ -50,6 +53,9 @@ local randomNumber3
 
 local function askQuestion()
 
+	
+
+	
 
 
 	-- pick a random number between 1 and 5
@@ -85,7 +91,7 @@ local function askQuestion()
 		correctAnswer = randomNumber1 * randomNumber2
 
 		--displaying the question
-		questionObject.text = randomNumber1 .. "*" .. randomNumber2 .. "="
+		questionObject.text = randomNumber1 .. " * " .. randomNumber2 .. " = "
 	elseif (randomOperator == 4) then
 		randomNumber1 = math.random(1,10)
 		randomNumber2 = math.random(1,10)
@@ -95,13 +101,21 @@ local function askQuestion()
 
 		questionObject.text = randomNumber1 .. " + " .. randomNumber2 .. " + " .. randomNumber3 .. " = "
 	elseif (randomOperator == 5) then
-		randomNumber1 = math.random(1,20)
+		--setting the two numbers
+		randomNumber1 = math.random(1,10)
+		randomNumber2 = math.random(1,10)
 
-		
-		
+		--setting the correctAnswer
+		-- and changing randomNumber1 with correctAnswer
+		correctAnswer = randomNumber1 * randomNumber2
+		randomNumber3 = randomNumber1
+		randomNumber1 = correctAnswer
+		correctAnswer = randomNumber3
+
+		--display the question 
+		questionObject.text = randomNumber1 .. " / " .. randomNumber2 .. " = "
 	end
 end
-
 local function numericFieldListener(event)
 
 	--user begins editing "numericField"
@@ -117,6 +131,7 @@ local function numericFieldListener(event)
 
 		--if the user answer and the correct answer are the same:
 		if (userAnswer == correctAnswer) then
+		
 			--give the user a point if they get the correct answer
 			points = points + 1
 			incorrectText.isVisible = false
@@ -124,19 +139,14 @@ local function numericFieldListener(event)
 			timer.performWithDelay(1000, HideCorrect)
 			event.target.text = ""
 			askQuestion()
-
-
-
 		else 
+			
 			-- taking away the hearts
 			liveNumber = liveNumber - 1
 			incorrectText.isVisible = true
 			correctText.isVisible = false
 			event.target.text = ""
 			askQuestion()
-
-			
-
 		end
 	end
 end
@@ -179,6 +189,7 @@ local function heartNumber(event)
 		heart2.isVisible = false
 
 	elseif (liveNumber == 0) then
+		timer.cancel(countDownTimer)
 		heart1.isVisible = false
 		heart2.isVisible = false
 		heart3.isVisible = false
@@ -206,6 +217,7 @@ local function pointsCounter(event)
 		plankton.yScale = plankton.yScale - 0.5
 		plankton.alpha = plankton.alpha - 0.01
 	elseif (points == 5) then
+		timer.cancel(countDownTimer)
 		thanos.isVisible = false
 		winnerObject.isVisible = true
 		incorrectText.isVisible = false
@@ -217,11 +229,36 @@ local function pointsCounter(event)
 		heart2.isVisible = false
 		thanos = display.newImageRect("Images/thanos2.png", 300, 500)
 		thanos.x = 750
-		thanos.y = 600
+		thanos.y = 500
 		thanos:rotate(45)
 		display.setDefault("background", 255/255, 255/255, 255/255)
 	end
 end
+
+local function UpdateTime()
+	
+	-- decrement the number of seconds
+	secondsLeft = secondsLeft - 1
+
+	-- display the number of seconds in the clock object 
+	clockText.text = secondsLeft .. ""
+
+	if (secondsLeft == 0) then
+		--reset the number of seconds left 
+		secondsLeft = totalSeconds
+		liveNumber = liveNumber - 1
+		askQuestion()
+	end
+end
+
+--function that calls the timer
+local function StartTimer()
+	--create a countDownTimer that loops infinetely
+	countDownTimer = timer.performWithDelay( 1000, UpdateTime, 0)
+end
+
+
+
 
 
 
@@ -271,7 +308,7 @@ incorrectText:setTextColor(200/255, 250/255, 20/255)
 
 --create numeric field
 numericField = native.newTextField( 700, display.contentHeight/2, 200, 120 )
-numericField.inputType = "number"
+numericField.inputType = "decimal"
 
 points = 0
 
@@ -341,10 +378,12 @@ bowserScrollSpeed = 10
 --creating the thanos that apears when the user wins
 thanos2 = display.newImageRect("Images/thanos2.png", 300, 500)
 thanos2.x = 750
-thanos2.y = 300
+thanos2.y = 200
 thanos2.isVisible = false
 
-
+clockText = display.newText("Time: " .. secondsLeft, 600, 600, nil, 70)
+clockText.x = 700
+clockText.y = 200
 
 -------------------------------------------------------------------
 --FUNCTION CALLS
@@ -368,4 +407,6 @@ Runtime:addEventListener("enterFrame", pointsCounter)
 
 
 
+UpdateTime()
 
+StartTimer()
