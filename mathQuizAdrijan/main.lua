@@ -147,8 +147,7 @@ local function askQuestion()
  	 	--setting the variables to ask the question
   		randomNumber1 = correctAnswer * correctAnswer
   		--asking the question
-  		questionObject.text = .." √ " .. randomNumber1
-
+  		questionObject.text = " √ " .. randomNumber1 .. " = "
 	end
 end
 --Funtion:numericFieldListener
@@ -233,6 +232,7 @@ local function heartNumber(event)
 		heart1.isVisible = false
 		heart2.isVisible = false
 	elseif (liveNumber == 0) then
+		clockText.isVisible = false
 		gameOverSoundChannel = audio.play(gameOverSound)
 		timer.cancel(countDownTimer)
 		heart1.isVisible = false
@@ -265,6 +265,7 @@ local function pointsCounter(event)
 		plankton.yScale = plankton.yScale - 0.5
 		plankton.alpha = plankton.alpha - 0.01
 	elseif (points == 5) then
+		clockText.isVisible = false
 		winnerSoundChannel = audio.play(winnerSound)
 		timer.cancel(countDownTimer)
 		thanos.isVisible = false
