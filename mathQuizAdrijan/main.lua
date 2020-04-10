@@ -73,7 +73,7 @@ local wrongSoundChannel
 local function askQuestion()
 
 	-- pick a random number between 1 and 5
-	randomOperator = math.random(1,6)
+	randomOperator = math.random(1,7)
 
 	if (randomOperator == 1) then
 		--setting the random numbers if it is a addition question
@@ -133,7 +133,7 @@ local function askQuestion()
 		-- answer and randomNumber3 so the next function works
 		correctAnswer = 1
 		randomNumber3 = 1
-		randomNumber2 = math.random(1, 5)
+		randomNumber1 = math.random(1, 5)
 
 		--this while statement makes the statement loops
 		while (randomNumber3 <= randomNumber1) do
@@ -141,6 +141,14 @@ local function askQuestion()
 			randomNumber3 = randomNumber3 + 1
 		end
 		questionObject.text = randomNumber1 .. "!" .. " = "
+	elseif (randomOperator == 7) then 
+	  	--setting the correctAnswer
+ 	 	correctAnswer = math.random(1,20)
+ 	 	--setting the variables to ask the question
+  		randomNumber1 = correctAnswer * correctAnswer
+  		--asking the question
+  		questionObject.text = .." √ " .. randomNumber1
+
 	end
 end
 --Funtion:numericFieldListener
