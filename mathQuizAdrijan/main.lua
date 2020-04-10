@@ -133,7 +133,7 @@ local function askQuestion()
 		randomNumber2 = math.random(1, 5)
 
 		--this while statement makes the statement loops
-		while (randomNumber3 < randomNumber1) then 
+		while (randomNumber3 <= randomNumber1) do
 			correctAnswer = correctAnswer * randomNumber3
 			randomNumber3 = randomNumber3 + 1
 		end
