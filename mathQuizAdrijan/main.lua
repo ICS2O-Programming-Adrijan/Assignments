@@ -54,13 +54,13 @@ local countDownTimer
 local correctSound = audio.loadSound("Sounds/correct.mp3")
 local correctSoundChannel
 
-local winnerSound = audio.loadSound("Sounds/winner.wav")
+local winnerSound = audio.loadSound("Sounds/Winner.mp3")
 local winnerSoundChannel
 
 local gameOverSound = audio.loadSound("Sounds/Loser.mp3")
 local gameOverSoundChannel
 
-local wrongSound = audio.loadSound("Sounds/wrong.wav")
+local wrongSound = audio.loadSound("Sounds/Wrong.mp3")
 local wrongSoundChannel
 
 ----------------------------------------------------------------
@@ -130,6 +130,19 @@ local function askQuestion()
 
 		--display the question 
 		questionObject.text = randomNumber1 .. " / " .. randomNumber2 .. " = "
+	elseif (randomOperator == 6) then
+		--setting the values of correct
+		-- answer and randomNumber3 so the next function works
+		correctAnswer = 1
+		randomNumber3 = 1
+		randomNumber2 = math.random(1, 5)
+
+		--this If statement makes the statement work 
+		if (randomNumber3 <= randomNumber1) then 
+			correctAnswer = correctAnswer * randomNumber3
+			randomNumber3 = randomNumber3 + 1
+		end
+		
 	end
 end
 local function numericFieldListener(event)
@@ -147,6 +160,7 @@ local function numericFieldListener(event)
 
 		--if the user answer and the correct answer are the same:
 		if (userAnswer == correctAnswer) then
+			secondsLeft = totalSeconds
 			correctSoundChannel = audio.play(correctSound)
 			--give the user a point if they get the correct answer
 			points = points + 1
@@ -156,7 +170,8 @@ local function numericFieldListener(event)
 			event.target.text = ""
 			askQuestion()
 		else 
-			wrongSoundChannel = audio.play(wrongSoundChannel)
+			secondsLeft = totalSeconds
+			wrongSoundChannel = audio.play(wrongSound)
 			-- taking away the hearts
 			liveNumber = liveNumber - 1
 			incorrectText.isVisible = true
