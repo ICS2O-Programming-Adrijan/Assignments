@@ -69,13 +69,8 @@ local wrongSoundChannel
 
 local function askQuestion()
 
-	
-
-	
-
-
 	-- pick a random number between 1 and 5
-	randomOperator = math.random(1,5)
+	randomOperator = math.random(1,6)
 
 	if (randomOperator == 1) then
 		--setting the random numbers if it is a addition question
@@ -137,12 +132,12 @@ local function askQuestion()
 		randomNumber3 = 1
 		randomNumber2 = math.random(1, 5)
 
-		--this If statement makes the statement work 
-		if (randomNumber3 <= randomNumber1) then 
+		--this while statement makes the statement loops
+		while (randomNumber3 < randomNumber1) then 
 			correctAnswer = correctAnswer * randomNumber3
 			randomNumber3 = randomNumber3 + 1
 		end
-		
+		questionObject.text = randomNumber1 .. "!" .. " = "
 	end
 end
 local function numericFieldListener(event)
