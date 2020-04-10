@@ -27,7 +27,7 @@ local userAnswer
 local correctText
 local incorrectText
 local points
-local Bowser
+local bowser
 local corona
 local mushroom
 local plankton
@@ -50,7 +50,7 @@ local countDownTimer
 -------------------------------------------------------------
 --SOUNDS
 --------------------------------------------------------------
---correct sound 
+--Uploading all the Sounds
 local correctSound = audio.loadSound("Sounds/correct.mp3")
 local correctSoundChannel
 
@@ -66,7 +66,10 @@ local wrongSoundChannel
 ----------------------------------------------------------------
 --LOCAL FUNCTION
 --------------------------------------------------------------------------
-
+--Function: AskQuestion
+--output:Asks the user a question
+--input:None
+--Description: This function displays a question for the user to answer 
 local function askQuestion()
 
 	-- pick a random number between 1 and 5
@@ -140,6 +143,10 @@ local function askQuestion()
 		questionObject.text = randomNumber1 .. "!" .. " = "
 	end
 end
+--Funtion:numericFieldListener
+--output:add the numericFieldListener
+--input: none
+--Description: This function decides if the user is right or wrong 
 local function numericFieldListener(event)
 
 	--user begins editing "numericField"
@@ -179,8 +186,10 @@ end
 
 
 
-
-
+--Funtion:MoveLeft
+--Output: this function acceptsthe event listener
+--input:None 
+--Description: This function moves thanos side to side
 
 movingLeft = true
 
@@ -203,7 +212,10 @@ local function MoveLeft(event)
 		movingLeft = true
 	end
 end
-
+--Funtion: heartNumber
+--Output: this function acceptsthe event listener
+--input:None
+--Description:counts how many hearts and makes them disapear
 local function heartNumber(event)
 	
 
@@ -225,7 +237,10 @@ local function heartNumber(event)
 		incorrectText.isVisible = false
 	end
 end
-
+--Funtion: pointsCounter
+--Output: this function acceptsthe event listener
+--input:None
+--Description:counts how many points and makes the villains disapear
 local function pointsCounter(event)
 	if (points == 1) then
 		bowser.y = bowser.y - bowserScrollSpeed
@@ -260,7 +275,10 @@ local function pointsCounter(event)
 		display.setDefault("background", 255/255, 255/255, 255/255)
 	end
 end
-
+--Function:UpdateTime
+--Output: this function acceptsthe event listener
+--input:None
+--Description:This function controls the time
 local function UpdateTime()
 	
 	-- decrement the number of seconds
@@ -276,39 +294,15 @@ local function UpdateTime()
 		askQuestion()
 	end
 end
-
+--Function: StartTimer
+--Output: this function acceptsthe event listener
+--input:None 
+--Description:this Function starts the time
 --function that calls the timer
 local function StartTimer()
 	--create a countDownTimer that loops infinetely
 	countDownTimer = timer.performWithDelay( 1000, UpdateTime, 0)
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -335,7 +329,7 @@ incorrectText:setTextColor(200/255, 250/255, 20/255)
 --create numeric field
 numericField = native.newTextField( 700, display.contentHeight/2, 200, 120 )
 numericField.inputType = "decimal"
-
+--set how many points the user starts with 
 points = 0
 
 
@@ -397,6 +391,7 @@ thanos.x = 200
 thanos.y = 610
 thanos.isVisible = true
 
+--setting all the scrollSpeeds needed 
 scrollSpeed = 2
 
 bowserScrollSpeed = 10
@@ -406,7 +401,7 @@ thanos2 = display.newImageRect("Images/thanos2.png", 300, 500)
 thanos2.x = 750
 thanos2.y = 200
 thanos2.isVisible = false
-
+--displaying the timer text 
 clockText = display.newText("Time: " .. secondsLeft, 600, 600, nil, 70)
 clockText.x = 700
 clockText.y = 200
@@ -432,7 +427,7 @@ Runtime:addEventListener("enterFrame", pointsCounter)
 
 
 
-
+--call the timer to start 
 UpdateTime()
 
 StartTimer()
