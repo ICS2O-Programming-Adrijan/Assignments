@@ -27,7 +27,12 @@ local scene = composer.newScene( sceneName )
 local logoSound = audio.loadSound("Sounds/logoSound.mp3")
 local logoSoundChannel
 
+local bkg = display.newImageRect("Images/background.png", 512,384)
+bkg.x = 512
+bkg.y = 384
+bkg.alpha = 0
 
+local alphaSpeed = 0.01
 
 --------------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
@@ -49,6 +54,10 @@ function scene:create( event )
 
     -- Creating a group that associates objects with the scene
     local sceneGroup = self.view
+
+    local function BkgRotation()
+        bkg.alpha = bkg.alpha + alphaSpeed
+    end
 
     -- set the background to be black
     display.setDefault("background", 0, 0, 0)
@@ -74,6 +83,8 @@ function scene:show( event )
     -----------------------------------------------------------------------------------------
 
     elseif ( phase == "did" ) then
+        
+
         -- start the splash screen music
         logoSoundChannel = audio.play(logoSound )
 
@@ -137,6 +148,8 @@ scene:addEventListener( "create", scene )
 scene:addEventListener( "show", scene )
 scene:addEventListener( "hide", scene )
 scene:addEventListener( "destroy", scene )
+
+Runtime:addEventListener(Runtime, BkgRotation)
 
 -----------------------------------------------------------------------------------------
 
