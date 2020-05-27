@@ -33,9 +33,15 @@ local logoText
 
 local centerTree
 
+local leftTree
+
+local rightTree
+
 local bkg
 
 local alphaSpeed = 0.01
+
+local scrollSpeed = 4
 
 --------------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
@@ -71,6 +77,19 @@ local function BkgRotation()
     logoText:rotate(1.9)
 end
 
+local function LeftTreeMovement()
+    leftTree.isVisible = true
+    leftTree.x = leftTree.x - scrollSpeed 
+    if leftTree.x >= 400 then
+        leftTree.x = leftTree.x
+    end
+end
+
+local function RightTreeMovement()
+    rightTree.xScale = rightTree.xScale + 0.01
+    rightTree.yScale = rightTree.yScale + 0.01
+end
+
 
 
 
@@ -102,6 +121,15 @@ function scene:create( event )
     
 
     --Creating all the rastorized images 
+    rightTree = display.newImageRect("Images/rightTree.png", 200, 125)
+    rightTree.x = 700
+    rightTree.y = 450
+
+
+    leftTree = display.newImageRect("Images/leftTree.png", 400, 250)
+    leftTree.x = 1024
+    leftTree.y = 450
+    leftTree.isVisible = false
 
     centerTree = display.newImageRect("Images/centerTree.png", 400, 250)
     centerTree.x = 0
@@ -142,6 +170,10 @@ function scene:show( event )
 
         -- start the splash screen music
         logoSoundChannel = audio.play(logoSound )
+
+        Runtime:addEventListener("enterFrame", RightTreeMovement)
+
+        Runtime:addEventListener("enterFrame", LeftTreeMovement)
 
         timer.performWithDelay(500, TreeMovement1)
         timer.performWithDelay(1000, TreeMovement2)
@@ -185,7 +217,9 @@ function scene:hide( event )
         bkg.isVisible = false
         logoText.isVisible = false
         centerTree.isVisible = false
-        
+        leftTree.isVisible = false
+        rightTree.isVisible = false
+
         -- stop the jungle sounds channel for this screen
         audio.stop(logoSoundChannel)
     end
