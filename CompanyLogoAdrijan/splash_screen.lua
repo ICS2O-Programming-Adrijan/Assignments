@@ -19,24 +19,63 @@ sceneName = "splash_screen"
 local scene = composer.newScene( sceneName )
 
 ----------------------------------------------------------------------------------------
+-- LOCAL SOUNDS
+-----------------------------------------------------------------------------------------
+
+local logoSound = audio.loadSound("Sounds/logoSound.mp3")
+local logoSoundChannel
+----------------------------------------------------------------------------------------
 -- LOCAL VARIABLES
 -----------------------------------------------------------------------------------------
  
 -- The local variables for this scene
+local logoText
 
-local logoSound = audio.loadSound("Sounds/logoSound.mp3")
-local logoSoundChannel
+local centerTree
 
-local bkg = display.newImageRect("Images/background.png", 512,384)
-bkg.x = 512
-bkg.y = 384
-bkg.alpha = 0
+local bkg
 
 local alphaSpeed = 0.01
 
 --------------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
 --------------------------------------------------------------------------------------------
+local function TreeMovement1()
+    centerTree.isVisible = true
+    centerTree.x = centerTree.x + 200
+    centerTree.y = centerTree.y + 200
+end
+
+local function TreeMovement2()
+    centerTree.x = centerTree.x + 600
+    centerTree.y = centerTree.y + 500
+end
+
+local function TreeMovement3()
+    centerTree.x = centerTree.x 
+    centerTree.y = centerTree.y - 600
+end
+
+local function TreeMovement4()
+    centerTree.x = centerTree.x - 700
+    centerTree.y = centerTree.y + 500
+end
+
+local function TreeMovement5()
+    centerTree.x = 512
+    centerTree.y = 450
+end
+
+local function BkgRotation()
+    bkg.alpha = bkg.alpha + alphaSpeed
+    logoText:rotate(1.9)
+end
+
+
+
+
+
+
 
 
 
@@ -55,12 +94,28 @@ function scene:create( event )
     -- Creating a group that associates objects with the scene
     local sceneGroup = self.view
 
-    local function BkgRotation()
-        bkg.alpha = bkg.alpha + alphaSpeed
-    end
+    
 
     -- set the background to be black
     display.setDefault("background", 0, 0, 0)
+
+    
+
+    --Creating all the rastorized images 
+
+    centerTree = display.newImageRect("Images/centerTree.png", 400, 250)
+    centerTree.x = 0
+    centerTree.y = 0
+    centerTree.isVisible = false
+
+    bkg = display.newImageRect("Images/background.png", 700,500)
+    bkg.x = 512
+    bkg.y = 384
+    bkg.alpha = 0
+
+    logoText = display.newImageRect("Images/Text.png", 650, 400)
+    logoText.x = 512
+    logoText.y = 290    
 end -- function scene:create( event )
 
 --------------------------------------------------------------------------------------------
@@ -87,6 +142,17 @@ function scene:show( event )
 
         -- start the splash screen music
         logoSoundChannel = audio.play(logoSound )
+
+        timer.performWithDelay(500, TreeMovement1)
+        timer.performWithDelay(1000, TreeMovement2)
+        timer.performWithDelay(1500, TreeMovement3)
+        timer.performWithDelay(2000, TreeMovement4)
+        timer.performWithDelay(2500, TreeMovement5)
+
+        Runtime:addEventListener("enterFrame", BkgRotation)
+
+        
+
 
 
         -- Go to the main menu screen after the given time.
@@ -116,6 +182,9 @@ function scene:hide( event )
 
     -- Called immediately after scene goes off screen.
     elseif ( phase == "did" ) then
+        bkg.isVisible = false
+        logoText.isVisible = false
+        centerTree.isVisible = false
         
         -- stop the jungle sounds channel for this screen
         audio.stop(logoSoundChannel)
@@ -149,7 +218,8 @@ scene:addEventListener( "show", scene )
 scene:addEventListener( "hide", scene )
 scene:addEventListener( "destroy", scene )
 
-Runtime:addEventListener(Runtime, BkgRotation)
+
+
 
 -----------------------------------------------------------------------------------------
 
