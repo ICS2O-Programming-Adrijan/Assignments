@@ -91,7 +91,10 @@ local function RightTreeMovement()
 end
 
 
-
+local function LeftTreeInvisible()
+    leftTree.isVisible = false
+    Runtime:removeEventListener("enterFrame", LeftTreeMovement)
+end
 
 
 
@@ -121,6 +124,17 @@ function scene:create( event )
     
 
     --Creating all the rastorized images 
+   
+
+    bkg = display.newImageRect("Images/background.png", 700,500)
+    bkg.x = 512
+    bkg.y = 384
+    bkg.alpha = 0
+
+    logoText = display.newImageRect("Images/Text.png", 650, 400)
+    logoText.x = 512
+    logoText.y = 290  
+
     rightTree = display.newImageRect("Images/rightTree.png", 200, 125)
     rightTree.x = 700
     rightTree.y = 450
@@ -134,16 +148,7 @@ function scene:create( event )
     centerTree = display.newImageRect("Images/centerTree.png", 400, 250)
     centerTree.x = 0
     centerTree.y = 0
-    centerTree.isVisible = false
-
-    bkg = display.newImageRect("Images/background.png", 700,500)
-    bkg.x = 512
-    bkg.y = 384
-    bkg.alpha = 0
-
-    logoText = display.newImageRect("Images/Text.png", 650, 400)
-    logoText.x = 512
-    logoText.y = 290    
+    centerTree.isVisible = false  
 end -- function scene:create( event )
 
 --------------------------------------------------------------------------------------------
@@ -185,7 +190,7 @@ function scene:show( event )
 
         
 
-
+        timer.performWithDelay(3000, LeftTreeInvisible)
 
         -- Go to the main menu screen after the given time.
         timer.performWithDelay ( 3000, gotoMainMenu)          
@@ -217,9 +222,7 @@ function scene:hide( event )
         bkg.isVisible = false
         logoText.isVisible = false
         centerTree.isVisible = false
-        leftTree.isVisible = false
         rightTree.isVisible = false
-
         -- stop the jungle sounds channel for this screen
         audio.stop(logoSoundChannel)
     end
