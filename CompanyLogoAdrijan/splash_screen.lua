@@ -1,10 +1,10 @@
 -----------------------------------------------------------------------------------------
 --
 -- splash_screen.lua
--- Created by: Your Name
--- Date: Month Day, Year
+-- Created by: Adrijan Vranjkovic
+-- Date: May 28, 2020
 -- Description: This is the splash screen of the game. It displays the 
--- company logo that...
+-- company logo that animates
 -----------------------------------------------------------------------------------------
 
 -- Use Composer Library
