@@ -114,6 +114,8 @@ end
 
 -- Creating Transition to Level1 Screen
 local function Level1ScreenTransition( )
+    muteButton.isVisible = false
+    unmuteButton.isVisible = false
     composer.gotoScene( "level1_screen", {effect = "flipFadeOutIn", time = 700})
 end    
 
