@@ -29,6 +29,20 @@ scene = composer.newScene( sceneName ) -- This function doesn't accept a string,
 local bkg_image
 local backButton
 
+local muteButton
+local unmuteButton
+
+
+muteButton = display.newImageRect("Images/mute.png", 100, 100)
+muteButton.x = 50
+muteButton.y = 50
+muteButton.isVisible = true
+
+unmuteButton = display.newImageRect("Images/unmute.png", 100, 100)
+unmuteButton.x = 50
+unmuteButton.y = 50
+unmuteButton.isVisible = false
+
 -------------------------------------------------------
 --SOUNDS
 --------------------------------------------------------
@@ -42,6 +56,38 @@ local creditSoundChannel
 -- Creating Transitioning Function back to main menu
 local function BackTransition( )
     composer.gotoScene( "main_menu", {effect = "zoomOutIn", time = 500})
+end
+
+local function SoundCheck()
+    if (soundOn == true) then
+        Unmute()
+    end
+end
+
+function Mute(touch)
+    if (touch.phase == "ended") then
+        --pause the sound
+        audio.pause(creditSound)
+        -- set the boolean variable to be false( sound is now muted)
+        soundOn = false
+        -- hide the mute mute button 
+        muteButton.isVisible = false
+        -- make the unmute button visible 
+        unmuteButton.isVisible = true
+    end
+end
+
+function Unmute(touch)
+    if (touch.phase == "ended") then
+        --pause the sound
+        audio.resume(creditSound)
+        -- set the boolean variable to be true( sound is now umuted)
+        soundOn = true
+        -- hide the mute mute button 
+        muteButton.isVisible = true
+        -- make the unmute button visible 
+        unmuteButton.isVisible = false
+    end
 end
 
 
@@ -123,6 +169,11 @@ function scene:show( event )
     -----------------------------------------------------------------------------------------
 
     elseif ( phase == "did" ) then
+        muteButton:addEventListener("touch", Mute)
+        unmuteButton:addEventListener("touch", Unmute)
+
+        Runtime:addEventListener("enterFrame", SoundCheck)
+
         creditSoundChannel = audio.play(creditSound)
         -- Called when the scene is now on screen.
         -- Insert code here to make the scene come alive.

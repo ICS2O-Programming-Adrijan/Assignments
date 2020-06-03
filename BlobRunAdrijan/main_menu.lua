@@ -67,7 +67,7 @@ local musicChannel
 -- LOCAL FUNCTIONS
 -----------------------------------------------------------------------------------------
 
-local function Mute(touch)
+function Mute(touch)
     if (touch.phase == "ended") then
         --pause the sound
         audio.pause(music)
@@ -80,7 +80,7 @@ local function Mute(touch)
     end
 end
 
-local function Unmute(touch)
+function Unmute(touch)
     if (touch.phase == "ended") then
         --pause the sound
         audio.resume(music)
