@@ -1,9 +1,9 @@
 -----------------------------------------------------------------------------------------
 --
 -- credits_screen.lua
--- Created by: Your Name
+-- Created by: Adrijan Vranjkovic
 -- Special thanks to Wal Wal for helping in the design of this framework.
--- Date: Month Day, Year
+-- Date: June, 4 2020
 -- Description: This is the credits page, displaying a back button to the main menu.
 -----------------------------------------------------------------------------------------
 
@@ -124,6 +124,9 @@ function scene:show( event )
 
     elseif ( phase == "did" ) then
         creditSoundChannel = audio.play(creditSound)
+        if (soundOn == false) then
+            audio.pause(creditSoundChannel)
+        end
         -- Called when the scene is now on screen.
         -- Insert code here to make the scene come alive.
         -- Example: start timers, begin animation, play audio, etc.
@@ -153,7 +156,7 @@ function scene:hide( event )
     -----------------------------------------------------------------------------------------
 
     elseif ( phase == "did" ) then
-        audio.stop(creditSoundChannel)
+        audio.stop(creditSound)
         -- Called immediately after scene goes off screen.
     end
 

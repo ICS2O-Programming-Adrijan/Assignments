@@ -28,6 +28,11 @@ sceneName = "main_menu"
 -- Creating Scene Object
 local scene = composer.newScene( sceneName )
 
+------------------------------------------------
+--GLOBAL VARIABLES
+----------------------------------------------------
+soundOn = true
+
 -----------------------------------------------------------------------------------------
 -- LOCAL VARIABLES
 -----------------------------------------------------------------------------------------
@@ -48,7 +53,7 @@ local instructionsButton
 
 local muteButton
 local unmuteButton
-soundOn = true
+
 
 muteButton = display.newImageRect("Images/mute.png", 100, 100)
 muteButton.x = 50
@@ -67,7 +72,7 @@ local musicChannel
 -- LOCAL FUNCTIONS
 -----------------------------------------------------------------------------------------
 
-function Mute(touch)
+local function Mute(touch)
     if (touch.phase == "ended") then
         --pause the sound
         audio.pause(music)
@@ -80,7 +85,7 @@ function Mute(touch)
     end
 end
 
-function Unmute(touch)
+local function Unmute(touch)
     if (touch.phase == "ended") then
         --pause the sound
         audio.resume(music)
@@ -244,7 +249,8 @@ function scene:show( event )
     -- Called when the scene is now on screen.
     -- Insert code here to make the scene come alive.
     -- Example: start timers, begin animation, play audio, etc.
-    elseif ( phase == "did" ) then  
+    elseif ( phase == "did" ) then 
+        
         muteButton:addEventListener("touch", Mute)
         unmuteButton:addEventListener("touch", Unmute)
 
@@ -253,6 +259,9 @@ function scene:show( event )
 
         Runtime:addEventListener("enterFrame", Background2Fade)
         musicChannel = audio.play (music)
+        if (soundOn == false) then
+            audio.pause(musicChannel)
+        end 
     end
 
 end -- function scene:show( event )

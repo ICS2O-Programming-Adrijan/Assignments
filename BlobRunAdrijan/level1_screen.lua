@@ -27,9 +27,30 @@ local scene = composer.newScene( sceneName )
 -----------------------------------------------------------------------------------------
 -- LOCAL VARIABLES
 -----------------------------------------------------------------------------------------
+local physics = require("physics")
+
+-- start physics
+physics.start()
 
 -- The local variables for this scene
 local bkg_image
+
+local pacGuy = display.newImage("Images/PacManOpen.png", 5, 5)
+pacGuy.x = 512
+pacGuy.y = 740
+pacGuy.width = 50
+pacGuy.height = 50
+--------------------------------------------------------
+--ALL WALLS
+----------------------------------------------------------
+local startWall = display.newImage("Images/wall1.png", 200, 50)
+startWall.x = 512
+startWall.y = 650
+
+
+---------------------------------------------------------
+--LOCAL FUNCTIONS
+---------------------------------------------------------
 
 -----------------------------------------------------------------------------------------
 -- GLOBAL SCENE FUNCTIONS
@@ -75,11 +96,11 @@ function scene:show( event )
     -----------------------------------------------------------------------------------------
 
     elseif ( phase == "did" ) then
-        
+        physics.addbody( startWall, { density=2, friction=1, bounce=0.3 } )
+
         -- Called when the scene is now on screen.
         -- Insert code here to make the scene come alive.
         -- Example: start timers, begin animation, play audio, etc.
-
     end
 
 end --function scene:show( event )

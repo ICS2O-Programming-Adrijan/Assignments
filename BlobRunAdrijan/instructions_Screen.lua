@@ -1,9 +1,9 @@
 -----------------------------------------------------------------------------------------
 --
 -- credits_screen.lua
--- Created by: Your Name
+-- Created by: Adrijan vranjkovic
 -- Special thanks to Wal Wal for helping in the design of this framework.
--- Date: Month Day, Year
+-- Date: June 4, 2020
 -- Description: This is the instructions page, displaying a back button to the main menu.
 -----------------------------------------------------------------------------------------
 
@@ -124,6 +124,9 @@ function scene:show( event )
 
     elseif ( phase == "did" ) then
         instructionsSoundChannel = audio.play(instructionsSound)
+        if (soundOn == false) then
+            audio.pause(instructionsSoundChannel)
+        end
         -- Called when the scene is now on screen.
         -- Insert code here to make the scene come alive.
         -- Example: start timers, begin animation, play audio, etc.
