@@ -32,6 +32,10 @@ local physics = require("physics")
 -- start physics
 physics.start()
 
+local scrollSpeed15 = 15
+local scrollSpeed5 = 5
+local scrollSpeed10 = 10
+
 -- The local variables for this scene
 local bkg_image
 
@@ -40,18 +44,65 @@ pacGuy.x = 512
 pacGuy.y = 740
 pacGuy.width = 50
 pacGuy.height = 50
+
+local alreadyTouchedPacGuy = false
+
+local ghost1 = display.newImageRect("Images/PacManClosed.png", 50, 50)
+ghost1.x = 512
+ghost1.y = 30
 --------------------------------------------------------
 --ALL WALLS
 ----------------------------------------------------------
-local startWall = display.newImage("Images/wall1.png", 200, 50)
+local startWall = display.newImageRect("Images/wall1.png", 200, 25)
 startWall.x = 512
 startWall.y = 650
 
 
+
+local wall1 = display.newImageRect("Images/wall2.png", 25, 200)
+wall1.x = 600
+wall1.y = 530
+
 ---------------------------------------------------------
 --LOCAL FUNCTIONS
 ---------------------------------------------------------
+--Function: PacGuyListener
+--Input: touch listener
+--output: none
+--Desription: when Blue girl is touched, move her
+local function PacGuyListener(touch)
 
+   if (touch.phase == "began") then 
+        alreadyTouchedPacGuy = true
+   end
+    if ( (touch.phase == "moved")) and (alreadyTouchedPacGuy == true) then
+      pacGuy.x = touch.x
+        pacGuy.y = touch.y
+    end
+
+    if (touch.phase == "ended") then
+     alreadyTouchedPacGuy = false
+    end
+end
+
+local function Ghost1Move()
+    ghost1.y = ghost1.y + scrollSpeed15
+    if (ghost1.y > 150) then
+        ghost1.y = 150
+        ghost1.x = ghost1.x + scrollSpeed5
+    end
+
+    if (ghost1.x > 812) then
+        ghost1.x = 812
+        ghost1.y = ghost1.y + scrollSpeed10
+    end
+    if (ghost1.y > 730) then
+        ghost1.y = 730
+    end
+end   
+
+
+      
 -----------------------------------------------------------------------------------------
 -- GLOBAL SCENE FUNCTIONS
 -----------------------------------------------------------------------------------------
@@ -96,8 +147,10 @@ function scene:show( event )
     -----------------------------------------------------------------------------------------
 
     elseif ( phase == "did" ) then
-        physics.addbody( startWall, { density=2, friction=1, bounce=0.3 } )
+        Runtime:addEventListener("enterFrame", Ghost1Move)
 
+        --add the respective listeners to each object
+        pacGuy:addEventListener("touch", PacGuyListener)
         -- Called when the scene is now on screen.
         -- Insert code here to make the scene come alive.
         -- Example: start timers, begin animation, play audio, etc.
