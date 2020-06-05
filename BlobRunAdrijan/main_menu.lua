@@ -1,9 +1,9 @@
 -----------------------------------------------------------------------------------------
 --
 -- main_menu.lua
--- Created by: Your Name
--- Date: Month Day, Year
--- Description: This is the main menu, displaying the credits, instructions & play buttons.
+-- Created by: Adrijan Vranjkovic
+-- Date: June, 4 2020
+-- Description: This is the main menu, displaying the credits, instructions & play buttons to my game.
 -----------------------------------------------------------------------------------------
 
 -----------------------------------------------------------------------------------------

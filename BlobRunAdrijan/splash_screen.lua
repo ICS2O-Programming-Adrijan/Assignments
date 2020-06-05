@@ -148,7 +148,13 @@ function scene:create( event )
     centerTree = display.newImageRect("Images/centerTree.png", 400, 250)
     centerTree.x = 0
     centerTree.y = 0
-    centerTree.isVisible = false  
+    centerTree.isVisible = false 
+
+    sceneGroup:insert(bkg) 
+    sceneGroup:insert(centerTree)
+    sceneGroup:insert(leftTree)   
+    sceneGroup:insert(rightTree) 
+    sceneGroup:insert(logoText) 
 end -- function scene:create( event )
 
 --------------------------------------------------------------------------------------------
@@ -219,10 +225,13 @@ function scene:hide( event )
 
     -- Called immediately after scene goes off screen.
     elseif ( phase == "did" ) then
-        bkg.isVisible = false
-        logoText.isVisible = false
-        centerTree.isVisible = false
-        rightTree.isVisible = false
+       Runtime:removeEventListener("enterFrame", RightTreeMovement)
+
+        Runtime:removeEventListener("enterFrame", LeftTreeMovement)
+
+        
+
+        Runtime:removeEventListener("enterFrame", BkgRotation)
         -- stop the jungle sounds channel for this screen
         audio.stop(logoSoundChannel)
     end

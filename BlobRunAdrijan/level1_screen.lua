@@ -13,6 +13,7 @@
 -- Use Composer Libraries
 local composer = require( "composer" )
 local widget = require( "widget" )
+local physics = require("physics")
 
 -----------------------------------------------------------------------------------------
 
@@ -27,10 +28,8 @@ local scene = composer.newScene( sceneName )
 -----------------------------------------------------------------------------------------
 -- LOCAL VARIABLES
 -----------------------------------------------------------------------------------------
-local physics = require("physics")
 
--- start physics
-physics.start()
+
 
 local scrollSpeed15 = 15
 local scrollSpeed5 = 5
@@ -39,29 +38,19 @@ local scrollSpeed10 = 10
 -- The local variables for this scene
 local bkg_image
 
-local pacGuy = display.newImage("Images/PacManOpen.png", 5, 5)
-pacGuy.x = 512
-pacGuy.y = 740
-pacGuy.width = 50
-pacGuy.height = 50
+local pacGuy 
 
 local alreadyTouchedPacGuy = false
 
-local ghost1 = display.newImageRect("Images/PacManClosed.png", 50, 50)
-ghost1.x = 512
-ghost1.y = 30
+local ghost1 
 --------------------------------------------------------
 --ALL WALLS
 ----------------------------------------------------------
-local startWall = display.newImageRect("Images/wall1.png", 200, 25)
-startWall.x = 512
-startWall.y = 650
+local startWall 
 
 
 
-local wall1 = display.newImageRect("Images/wall2.png", 25, 200)
-wall1.x = 600
-wall1.y = 530
+local wall1 
 
 ---------------------------------------------------------
 --LOCAL FUNCTIONS
@@ -114,6 +103,27 @@ function scene:create( event )
     local sceneGroup = self.view
 
     -----------------------------------------------------------------------------------------
+   --Creating my characters ans walls
+    pacGuy = display.newImage("Images/PacManOpen.png", 5, 5)
+    pacGuy.x = 512
+    pacGuy.y = 740
+    pacGuy.width = 50
+    pacGuy.height = 50
+
+    ghost1 = display.newImageRect("Images/PacManClosed.png", 50, 50)
+    ghost1.x = 512
+    ghost1.y = 30
+
+    startWall = display.newImageRect("Images/wall1.png", 200, 25)
+    startWall.x = 512
+    startWall.y = 650
+
+    wall1 = display.newImageRect("Images/wall2.png", 25, 200)
+    wall1.x = 600
+    wall1.y = 530
+
+    
+
 
     -- Insert the background image
     bkg_image = display.newImageRect("Images/lvl1Bkg.png", display.contentWidth, display.contentHeight)
@@ -142,7 +152,8 @@ function scene:show( event )
     -----------------------------------------------------------------------------------------
 
     if ( phase == "will" ) then
-
+        -- start physics
+        physics.start()
         -- Called when the scene is still off screen (but is about to come on screen).
     -----------------------------------------------------------------------------------------
 
@@ -177,6 +188,10 @@ function scene:hide( event )
     -----------------------------------------------------------------------------------------
 
     elseif ( phase == "did" ) then
+        Runtime:removeEventListener("enterFrame", Ghost1Move)
+
+        --add the respective listeners to each object
+        pacGuy:removeEventListener("touch", PacGuyListener)
         -- Called immediately after scene goes off screen.
     end
 
