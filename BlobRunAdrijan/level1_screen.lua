@@ -90,6 +90,12 @@ local function Ghost1Move()
     end
 end   
 
+local function AddPhysics()
+    physics.addBody(ghost1, "static", {density=1, friction=0.3, bounce=0.2})
+    physics.addBody(pacGuy, "static", { density=0, friction=0.5, bounce=0, rotation=0 } )
+    physics.addBody(wall1, "static", { density=1, friction=0.3, bounce=0.2} )   
+end
+
 
       
 -----------------------------------------------------------------------------------------
@@ -158,10 +164,8 @@ function scene:show( event )
     -----------------------------------------------------------------------------------------
 
     elseif ( phase == "did" ) then
-         physics.addBody(ghost1, "static", {density=1, friction=0.3, bounce=0.2})
-    physics.addBody(pacGuy, "static", { density=0, friction=0.5, bounce=0, rotation=0 } )
-    physics.addBody(wall1, "static", { density=1, friction=0.3, bounce=0.2} )   
         Runtime:addEventListener("enterFrame", Ghost1Move)
+        Runtime:addEventListener("enterFrame", AddPhysics)
         --add the respective listeners to each object
         pacGuy:addEventListener("touch", PacGuyListener)
         -- Called when the scene is now on screen.

@@ -36,12 +36,7 @@ soundOn = true
 -----------------------------------------------------------------------------------------
 -- LOCAL VARIABLES
 -----------------------------------------------------------------------------------------
-local background2 = display.newImage("Images/Background.2.png")
-background2.x = display.contentCenterX
-background2.y = display.contentCenterY
-background2.width = display.contentWidth
-background2.height = display.contentHeight
-background2.alpha = 0
+local background2 
 
 local alphaSpeed = 0.01
 local scrollSpeed = 5
@@ -55,15 +50,7 @@ local muteButton
 local unmuteButton
 
 
-muteButton = display.newImageRect("Images/mute.png", 100, 100)
-muteButton.x = 50
-muteButton.y = 50
-muteButton.isVisible = true
 
-unmuteButton = display.newImageRect("Images/unmute.png", 100, 100)
-unmuteButton.x = 50
-unmuteButton.y = 50
-unmuteButton.isVisible = false
 ------------------------------------------------
 --SOUNDS
 local music = audio.loadSound("Sounds/Music.mp3")
@@ -134,6 +121,28 @@ end
 
 -- The function called when the screen doesn't exist
 function scene:create( event )
+    background2 = display.newImage("Images/Background.2.png")
+    background2.x = display.contentCenterX
+    background2.y = display.contentCenterY
+    background2.width = display.contentWidth
+    background2.height = display.contentHeight
+    background2.alpha = 0
+
+    muteButton = display.newImageRect("Images/mute.png", 100, 100)
+    muteButton.x = 50
+    muteButton.y = 50
+    muteButton.isVisible = true
+
+    unmuteButton = display.newImageRect("Images/unmute.png", 100, 100)
+    unmuteButton.x = 50
+    unmuteButton.y = 50
+    unmuteButton.isVisible = false
+
+    sceneGroup:insert(background2)
+    sceneGroup:insert(muteButton)
+    sceneGroup:insert(unmuteButton)
+
+
 
     -- Creating a group that associates objects with the scene
     local sceneGroup = self.view
@@ -288,6 +297,10 @@ function scene:hide( event )
     -----------------------------------------------------------------------------------------
 
     elseif ( phase == "did" ) then
+        muteButton:removeEventListener("touch", Mute)
+        unmuteButton:removeEventListener("touch", Unmute)
+        Runtime:removeEventListener("enterFrame", PlayMovement)
+        Runtime:removeEventListener("enterFrame", Background2Fade)
         -- Called immediately after scene goes off screen.
         audio.stop(musicChannel)
     end
