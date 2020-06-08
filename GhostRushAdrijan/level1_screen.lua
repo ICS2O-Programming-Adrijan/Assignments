@@ -47,11 +47,22 @@ local ghost1
 --ALL WALLS
 ----------------------------------------------------------
 local startWall 
+local endWall1
+local endWall2
 
-
-
+--Walls numbers go from bottom to top
 local wall1 
-
+local wall2
+local wall3
+local wall4
+local wall5
+local wall6
+local wall7
+local wall8
+local wall9
+local wall10
+local wall11
+local wall12
 ---------------------------------------------------------
 --LOCAL FUNCTIONS
 ---------------------------------------------------------
@@ -75,7 +86,7 @@ local function PacGuyListener(touch)
 end
 
 local function Ghost1Move()
-    ghost1.y = ghost1.y + scrollSpeed15
+    ghost1.y = ghost1.y + scrollSpeed5
     if (ghost1.y > 150) then
         ghost1.y = 150
         ghost1.x = ghost1.x + scrollSpeed5
@@ -83,7 +94,7 @@ local function Ghost1Move()
 
     if (ghost1.x > 812) then
         ghost1.x = 812
-        ghost1.y = ghost1.y + scrollSpeed15
+        ghost1.y = ghost1.y + scrollSpeed5
     end
     if (ghost1.y > 730) then
         ghost1.y = 730
@@ -91,7 +102,7 @@ local function Ghost1Move()
 end 
 local function AddPhysics()
     physics.addBody(ghost1, "static", {density=1, friction=0.3, bounce=0.2})
-    physics.addBody(pacGuy, "dynamic", { density=0, friction=0.5, bounce=0, rotation=0 } )
+    physics.addBody(pacGuy, "static", { density=0, friction=0.5, bounce=0, rotation=0 } )
     physics.addBody(wall1, "static", { density=1, friction=0.3, bounce=0.2} )   
 end  
 
@@ -109,7 +120,7 @@ function scene:create( event )
 
     -----------------------------------------------------------------------------------------
    --Creating my characters ans walls
-    pacGuy = display.newImage("Images/PacManOpen.png", 5, 5)
+    pacGuy = display.newImageRect("Images/PacManOpen.png", 5, 5)
     pacGuy.x = 512
     pacGuy.y = 710
     pacGuy.width = 50
@@ -123,10 +134,62 @@ function scene:create( event )
     startWall.x = 512
     startWall.y = 768
 
-    wall1 = display.newImageRect("Images/wall2.png", 25, 200)
+    wall1 = display.newImageRect("Images/wall2.png", 25, 100)
     wall1.x = 600
-    wall1.y = 530
+    wall1.y = 500
 
+    wall2 = display.newImageRect("Images/wall1.png", 100, 25)
+    wall2.x = 512
+    wall2.y = 650
+
+
+    wall3 = display.newImageRect("Images/wall1.png", 150, 25)
+    wall3.x = 537
+    wall3.y = 460
+
+    wall4 = display.newImageRect("Images/wall1.png", 100, 25)
+    wall4.x = 537
+    wall4.y = 370
+
+    wall5 = display.newImageRect("Images/wall2.png", 25, 100)
+    wall5.x = 580
+    wall5.y = 333
+
+    wall6 = display.newImageRect("Images/wall1.png", 190, 25)
+    wall6.x = 662
+    wall6.y = 295
+
+    wall7 = display.newImageRect("Images/wall1.png", 100, 25)
+    wall7.x = 900
+    wall7.y = 280
+
+    wall8 = display.newImageRect("Images/wall2.png", 25, 100)
+    wall8.x = 900
+    wall8.y = 610
+
+    wall9 = display.newImageRect("Images/wall2.png", 25, 100)
+    wall9.x = 900
+    wall9.y = 345
+
+    wall10 = display.newImageRect("Images/wall1.png", 100, 25)
+    wall10.x = 1000
+    wall10.y = 475
+
+    wall11 = display.newImageRect("Images/wall1.png", 100, 25)
+    wall11.x = 730
+    wall11.y = 450
+
+    wall12 = display.newImageRect("Images/wall2.png", 25, 100)
+    wall12.x = 730
+    wall12.y = 600
+
+    endWall1 = display.newImageRect("Images/wall1.png", 100, 25)
+    endWall1.x = 1000
+    endWall1.y = 50
+
+    endWall2 = display.newImageRect("Images/wall1.png", 100, 25)
+    endWall2.x = 860
+    endWall2.y = 50
     
 
 
