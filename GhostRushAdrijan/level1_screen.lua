@@ -60,9 +60,18 @@ local wall6
 local wall7
 local wall8
 local wall9
-local wall10
 local wall11
 local wall12
+local wall13
+local wall14
+local wall14
+
+
+-- Gate walls
+local leftGateWall1
+local leftGateWall2
+local leftGateWall1
+local leftGatewall2
 ---------------------------------------------------------
 --LOCAL FUNCTIONS
 ---------------------------------------------------------
@@ -105,6 +114,28 @@ local function AddPhysics()
     physics.addBody(pacGuy, "static", { density=0, friction=0.5, bounce=0, rotation=0 } )
     physics.addBody(wall1, "static", { density=1, friction=0.3, bounce=0.2} )   
 end  
+
+local function RightToLeftGate()
+    if ( pacGuy.x > 1024) then
+        if (pacGuy.y > 415) then
+            if (pacGuy.y < 500) then
+                pacGuy.x = 20
+            end
+        end
+    end
+end
+
+local function LeftToRightGate()
+    if ( pacGuy.x < 0) then
+        if (pacGuy.y > 415) then
+            if (pacGuy.y < 500) then
+                pacGuy.x = 1000
+            end
+        end
+    end
+end
+
+
 
 
       
@@ -161,19 +192,17 @@ function scene:create( event )
 
     wall7 = display.newImageRect("Images/wall1.png", 100, 25)
     wall7.x = 900
-    wall7.y = 280
+    wall7.y = 260
 
     wall8 = display.newImageRect("Images/wall2.png", 25, 100)
-    wall8.x = 900
-    wall8.y = 610
+    wall8.x = 870
+    wall8.y = 640
 
-    wall9 = display.newImageRect("Images/wall2.png", 25, 100)
-    wall9.x = 900
-    wall9.y = 345
+    wall9 = display.newImageRect("Images/wall2.png", 25, 140)
+    wall9.x = 880
+    wall9.y = 341
 
-    wall10 = display.newImageRect("Images/wall1.png", 100, 25)
-    wall10.x = 1000
-    wall10.y = 475
+   
 
     wall11 = display.newImageRect("Images/wall1.png", 100, 25)
     wall11.x = 730
@@ -183,6 +212,16 @@ function scene:create( event )
     wall12.x = 730
     wall12.y = 600
 
+    wall13 = display.newImageRect("Images/wall2.png", 25, 120)
+    wall13.x = 870
+    wall13.y = 125
+
+    wall14 = display.newImageRect("Images/wall2.png", 25, 110)
+    wall14.x = 745
+    wall14.y = 253
+
+   
+
     endWall1 = display.newImageRect("Images/wall1.png", 100, 25)
     endWall1.x = 1000
     endWall1.y = 50
@@ -190,6 +229,25 @@ function scene:create( event )
     endWall2 = display.newImageRect("Images/wall1.png", 100, 25)
     endWall2.x = 860
     endWall2.y = 50
+
+    --Gate walls-----------------------------------------------------------
+    leftGateWall1 = display.newImageRect("Images/wall1.png", 80, 25)
+    leftGateWall1.x = 0
+    leftGateWall1.y = 500
+
+    leftGatewall2 = display.newImageRect("Images/wall1.png", 80, 25)
+    leftGatewall2.x = 0
+    leftGatewall2.y = 415
+
+    rightGatewall1 = display.newImageRect("Images/wall1.png", 80, 25)
+    rightGatewall1.x = 1000
+    rightGatewall1.y = 500
+
+    rightGatewall2 = display.newImageRect("Images/wall1.png", 80, 25)
+    rightGatewall2.x = 1000
+    rightGatewall2.y = 415
+
+
     
 
 
@@ -229,8 +287,12 @@ function scene:show( event )
 
     elseif ( phase == "did" ) then
         AddPhysics()
-        Runtime:addEventListener("enterFrame", Ghost1Move)
+        
+
         --add the respective listeners to each object
+        Runtime:addEventListener("enterFrame", LeftToRightGate)
+        Runtime:addEventListener("enterFrame", RightToLeftGate)
+        Runtime:addEventListener("enterFrame", Ghost1Move)
         pacGuy:addEventListener("touch", PacGuyListener)
         -- Called when the scene is now on screen.
         -- Insert code here to make the scene come alive.
