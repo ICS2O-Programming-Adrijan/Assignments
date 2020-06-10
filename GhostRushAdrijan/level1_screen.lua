@@ -46,9 +46,17 @@ local ghost1
 --------------------------------------------------------
 --ALL WALLS
 ----------------------------------------------------------
-local startWall 
-local endWall1
-local endWall2
+local startWall
+
+-- End Walls 
+local endWallL1
+local endWallL2
+local endWallL3
+local endWallR1
+local endWallR2
+local endWallR3
+local endGateR
+local endGateL
 
 --Walls numbers go from bottom to top
 local wall1 
@@ -221,22 +229,47 @@ function scene:create( event )
     wall14.y = 253
 
    
+    --END WALLS-----------------------------------------------
+    endWallR1 = display.newImageRect("Images/wall1.png", 100, 25)
+    endWallR1.x = 1000
+    endWallR1.y = 50
 
-    endWall1 = display.newImageRect("Images/wall1.png", 100, 25)
-    endWall1.x = 1000
-    endWall1.y = 50
+    endWallR2 = display.newImageRect("Images/wall1.png", 100, 25)
+    endWallR2.x = 860
+    endWallR2.y = 50
 
-    endWall2 = display.newImageRect("Images/wall1.png", 100, 25)
-    endWall2.x = 860
-    endWall2.y = 50
+    endWallR3 = display.newImageRect("Images/wall1.png", 100, 25)
+    endWallR3.x = 720
+    endWallR3.y = 50
+
+
+    endWallL3 = display.newImageRect("Images/wall1.png", 100, 25)
+    endWallL3.x = 304
+    endWallL3.y = 50
+
+    endWallL2 = display.newImageRect("Images/wall1.png", 100, 25)
+    endWallL2.x = 164
+    endWallL2.y = 50
+
+    endWallR3 = display.newImageRect("Images/wall1.png", 100, 25)
+    endWallR3.x = 24
+    endWallR3.y = 50
+
+    endGateL = display.newImageRect("Images/wall2.png", 25, 100)
+    endGateL.x = 450
+    endGateL.y = 10
+
+    endGateR = display.newImageRect("Images/wall2.png", 25, 100)
+    endGateR.x = 574
+    endGateR.y = 10
 
     --Gate walls-----------------------------------------------------------
     leftGateWall1 = display.newImageRect("Images/wall1.png", 80, 25)
-    leftGateWall1.x = 0
+    leftGateWall1.x = 24
     leftGateWall1.y = 500
 
     leftGatewall2 = display.newImageRect("Images/wall1.png", 80, 25)
-    leftGatewall2.x = 0
+    leftGatewall2.x = 24
     leftGatewall2.y = 415
 
     rightGatewall1 = display.newImageRect("Images/wall1.png", 80, 25)
