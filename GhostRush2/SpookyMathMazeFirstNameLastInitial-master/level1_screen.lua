@@ -35,6 +35,8 @@ local ball1L
 local ball2L
 local ball3L
 local ballSetUp
+local ghost1
+local scrollSpeed5 = 5
 -- The local variables for this scene
 userLives = 3
 lvNumber = 1
@@ -43,6 +45,7 @@ local bkg_image
 local analogStick
 local facingWhichDirection = "right"
 local joystickPressed = false
+
 
 --Walls
 local startWall
@@ -77,6 +80,12 @@ local wall17
 local wall18
 local wall19
 local wall20
+local wall21 
+local wall22
+local wall23 
+local wall24
+local wall25
+local wall26
 
 -- Gate walls
 local leftGateWall1
@@ -151,10 +160,23 @@ local function FireBallSetUp()
 end
 
 
-local function WinnerTransition()
-    composer.gotoScene( "you_Win")
+local function Ghost1Move()
+    ghost1.y = ghost1.y + scrollSpeed5
+    if (ghost1.y > 140) then
+        ghost1.y = 140
+        ghost1.x = ghost1.x + scrollSpeed5
+    end
+
+    if (ghost1.x > 790) then
+        ghost1.x = 790
+    end
 end
 
+local function Ghost1Move2()
+    if (ghost1.x <= 790) then
+        ghost1.y = ghost1.y + scrollSpeed5
+    end
+end
 -- Creating a function which limits the characters' movement to the visible screen
 
 --local function ScreenLimit( character )   
@@ -285,6 +307,8 @@ local function AddPhysicsBodies()
     physics.addBody(ball1L, "dynamic", {friction=1}) 
     physics.addBody(ball2L, "dynamic", {friction=1}) 
     physics.addBody(ball3L, "dynamic", {friction=1}) 
+    physics.addBody(ghost1, "dynamic", {friction=1}) 
+
 end
 
 local function RemovePhysicsBodies()
@@ -325,6 +349,8 @@ local function RemovePhysicsBodies()
     physics.removeBody(ball1L)
     physics.removeBody(ball2L)
     physics.removeBody(ball3L)
+    physics.removeBody(ghost1)
+
 end
 
 -- Creating Joystick function that determines whether or not joystick is pressed
@@ -452,6 +478,22 @@ function scene:create( event )
     wall20.x = 328
     wall20.y = 442
 
+    wall21 = display.newImageRect("Images/wall1.png", 100, 25)
+    wall21.x = 200
+    wall21.y = 370
+
+    wall22 = display.newImageRect("Images/wall2.png", 25, 100)
+    wall22.x = 164
+    wall22.y = 309
+
+    wall23 = display.newImageRect("Images/wall2.png", 25, 100)
+    wall23.x = 250
+    wall23.y = 130
+
+    wall24 = display.newImageRect("Images/wall1.png", 150, 25)
+    wall24.x = 400
+    wall24.y = 250
+
     --END WALLS-----------------------------------------------
     endWallR1 = display.newImageRect("Images/wall1.png", 100, 25)
     endWallR1.x = 1000
@@ -534,6 +576,12 @@ function scene:create( event )
     pacGuy.anchorY = 0 
     pacGuy.x = 512
     pacGuy.y = 710
+
+    ghost1 = display.newImageRect("Images/Ghost.png", 50, 50)
+    ghost1.anchorX = 0
+    ghost1.anchorY = 0 
+    ghost1.x = 512
+    ghost1.y = 0
     
 
 -----------------------------------------------------------------
@@ -667,8 +715,8 @@ function scene:show( event )
         Runtime:addEventListener("enterFrame", RightToLeftGate)
         Runtime:addEventListener("enterFrame", WinGate)
         Runtime:addEventListener("enterFrame", FireBallSetUp)
-
-
+        Runtime:addEventListener("enterFrame", Ghost1Move)
+        Runtime:addEventListener("enterFrame", Ghost1Move2)
     end
 
 end  --function scene:show( event )
@@ -703,6 +751,8 @@ function scene:hide( event )
         Runtime:removeEventListener( "enterFrame", FireBallSetUp)
         Runtime:removeEventListener( "enterFrame", LeftToRightGate )
         Runtime:removeEventListener( "enterFrame", RightToLeftGate )
+        Runtime:removeEventListener( "enterFrame", Ghost1Move )
+        Runtime:removeEventListener( "enterFrame", Ghost1Move2 )
 
         Runtime:removeEventListener( "enterFrame", WinGate)
         -- Removing the listener which listens for the usage of the joystick
