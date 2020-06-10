@@ -256,7 +256,7 @@ function scene:create( event )
     endWallR3.y = 50
 
     endGateL = display.newImageRect("Images/wall2.png", 25, 100)
-    endGateL.x = 450
+    endGateL.x = 455
     endGateL.y = 10
 
     endGateR = display.newImageRect("Images/wall2.png", 25, 100)
