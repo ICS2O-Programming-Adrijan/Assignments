@@ -34,9 +34,13 @@ local scene = composer.newScene( sceneName )
 local ball1L
 local ball2L
 local ball3L
+local ball1R
+local ball2R
+local ball3R
 local ballSetUp
 local ghost1
 local scrollSpeed5 = 5
+local ghostSetUp
 -- The local variables for this scene
 userLives = 3
 lvNumber = 1
@@ -84,8 +88,7 @@ local wall21
 local wall22
 local wall23 
 local wall24
-local wall25
-local wall26
+
 
 -- Gate walls
 local leftGateWall1
@@ -129,12 +132,20 @@ end
 
 local function FireBallSetUp()
     if (ballSetUp == 1) then 
+       --left side balls
         ball1L.x = 350
         ball1L.y = 600
         ball2L.x = 200
         ball2L.y = 450
         ball3L.x = 400
         ball3L.y = 280
+        --right side balls
+        ball1R.x = 800
+        ball1R.y = 500
+        ball2R.x = 600
+        ball2R.y = 650
+        ball3R.x = 700
+        ball3R.y = 200
     elseif (ballSetUp == 2) then
         ball1L.x = 500
         ball1L.y = 200
@@ -142,6 +153,13 @@ local function FireBallSetUp()
         ball2L.y = 400
         ball3L.x = 300
         ball3L.y = 500
+        --------------
+        ball1R.x = 650
+        ball1R.y = 200
+        ball2R.x = 900
+        ball2R.y = 650
+        ball3R.x = 800
+        ball3R.y = 400
     elseif (ballSetUp == 3) then
         ball1L.x = 250
         ball1L.y = 500
@@ -149,6 +167,13 @@ local function FireBallSetUp()
         ball2L.y = 600
         ball3L.x = 400
         ball3L.y = 380
+        ----------------
+        ball1R.x = 550
+        ball1R.y = 400
+        ball2R.x = 900
+        ball2R.y = 100
+        ball3R.x = 600
+        ball3R.y = 700
     elseif (ballSetUp == 4) then
         ball1L.x = 100
         ball1L.y = 600
@@ -156,27 +181,107 @@ local function FireBallSetUp()
         ball2L.y = 200
         ball3L.x = 300
         ball3L.y = 500
+        --------------
+        ball1R.x = 700
+        ball1R.y = 400
+        ball2R.x = 900
+        ball2R.y = 200
+        ball3R.x = 800
+        ball3R.y = 600
     end
 end
 
 
+ghostSetUp = math.random(1,2)
+
+movingLeft = true
 local function Ghost1Move()
-    ghost1.y = ghost1.y + scrollSpeed5
-    if (ghost1.y > 140) then
-        ghost1.y = 140
-        ghost1.x = ghost1.x + scrollSpeed5
-    end
+    
+    if (ghostSetUp == 1) then
+        if (movingLeft == true) then
+            ghost1.x = ghost1.x - scrollSpeed5
+        else 
+            ghost1.x = ghost1.x + scrollSpeed5
+        end
 
-    if (ghost1.x > 790) then
-        ghost1.x = 790
+        if (ghost1.x < 350) then
+            movingLeft = false
+        end
+
+        if (ghost1.x > 700) then
+            movingLeft = true
+        end
+
+    elseif (ghostSetUp == 2) then
+
+        if (movingLeft == true) then
+            ghost1.y = ghost1.y - scrollSpeed5
+        else 
+            ghost1.y = ghost1.y + scrollSpeed5
+        end
+
+        if (ghost1.y < 30) then
+            movingLeft = false
+        end
+
+        if (ghost1.y > 200) then
+            movingLeft = true
+        end
     end
 end
 
-local function Ghost1Move2()
-    if (ghost1.x <= 790) then
-        ghost1.y = ghost1.y + scrollSpeed5
+local function OnCollision()
+    if ( event.phase == "began" ) then
+
+        
+
+        if  (event.target.myName == "ball1L") or 
+            (event.target.myName == "ball2L") or
+            (event.target.myName == "ball3L") or
+            (event.target.myName == "ball1R") or 
+            (event.target.myName == "ball2R") or
+            (event.target.myName == "ghost1") or
+            (event.target.myName == "ball3R") then
+            composer.gotoScene("you_Lose")
+        end
     end
 end
+
+local function AddCollisionListeners()
+    -- if character collides with ball, onCollision will be called
+    ghost1.collision = onCollision
+    ghost1:addEventListener( "collision" )
+
+
+    -- if character collides with ball, onCollision will be called    
+    ball1L.collision = onCollision
+    ball1L:addEventListener( "collision" )
+    ball2L.collision = onCollision
+    ball2L:addEventListener( "collision" )
+    ball3L.collision = onCollision
+    ball3L:addEventListener( "collision" )
+    
+    ball1R.collision = onCollision
+    ball1R:addEventListener( "collision" )
+    ball2R.collision = onCollision
+    ball2R:addEventListener( "collision" )
+    ball3R.collision = onCollision
+    ball3R:addEventListener( "collision" )
+end
+
+local function RemoveCollisionListeners()
+    ghost1:removeEventListener( "collision" )
+    ball1L:removeEventListener( "collision" )
+    ball2L:removeEventListener( "collision" )
+    ball3L:removeEventListener( "collision" )
+
+    ball1R:removeEventListener( "collision" )
+    ball2R:removeEventListener( "collision" )
+    ball3R:removeEventListener( "collision")
+
+end
+
+
 -- Creating a function which limits the characters' movement to the visible screen
 
 --local function ScreenLimit( character )   
@@ -289,6 +394,10 @@ local function AddPhysicsBodies()
     physics.addBody(wall18, "static", {friction = 0})
     physics.addBody(wall19, "static", {friction = 0})
     physics.addBody(wall20, "static", {friction = 0})
+    physics.addBody(wall21, "static", {friction = 0})
+    physics.addBody(wall22, "static", {friction = 0})
+    physics.addBody(wall23, "static", {friction = 0})
+    physics.addBody(wall24, "static", {friction = 0})
 
     physics.addBody(startWall, "static", {friction = 0})
     physics.addBody(endWallR1, "static", {friction = 0})
@@ -308,6 +417,9 @@ local function AddPhysicsBodies()
     physics.addBody(ball2L, "dynamic", {friction=1}) 
     physics.addBody(ball3L, "dynamic", {friction=1}) 
     physics.addBody(ghost1, "dynamic", {friction=1}) 
+    physics.addBody(ball1R, "dynamic", {friction=1}) 
+    physics.addBody(ball2R, "dynamic", {friction=1}) 
+    physics.addBody(ball3R, "dynamic", {friction=1}) 
 
 end
 
@@ -332,6 +444,11 @@ local function RemovePhysicsBodies()
     physics.removeBody(wall18)
     physics.removeBody(wall19)
     physics.removeBody(wall20)
+    physics.removeBody(wall21)
+    physics.removeBody(wall22)
+    physics.removeBody(wall23)
+    physics.removeBody(wall24)
+
     physics.removeBody(startWall)
     physics.removeBody(endWallL1)
     physics.removeBody(endWallL2)
@@ -350,6 +467,9 @@ local function RemovePhysicsBodies()
     physics.removeBody(ball2L)
     physics.removeBody(ball3L)
     physics.removeBody(ghost1)
+    physics.removeBody(ball1R)
+    physics.removeBody(ball2R)
+    physics.removeBody(ball3R)
 
 end
 
@@ -549,14 +669,32 @@ function scene:create( event )
     ball1L = display.newImageRect("Images/fireBall.png", 40, 40)
     ball1L.x = 400
     ball1L.y = 600
+    ball1L.myName = "ball1L"
 
     ball2L = display.newImageRect("Images/fireBall.png", 40, 40)
     ball2L.x = 150
     ball2L.y = 450
+    ball2L.myName = "ball2L"
 
     ball3L = display.newImageRect("Images/fireBall.png", 40, 40)
     ball3L.x = 500
     ball3L.y = 300   
+    ball1L.myName = "ball3L"
+
+    ball1R = display.newImageRect("Images/fireBall.png", 40, 40)
+    ball1R.x = 600
+    ball1R.y = 200 
+    ball1R.myName = "ball1R"
+
+    ball2R = display.newImageRect("Images/fireBall.png", 40, 40)
+    ball2R.x = 600
+    ball2R.y = 200 
+    ball2R.myName = "ball2R"
+
+    ball3R = display.newImageRect("Images/fireBall.png", 40, 40)
+    ball3R.x = 600
+    ball3R.y = 200 
+    ball3R.myName = "ball3R"
 
     -- Creating Joystick
     analogStick = joystick.new( 50, 75 ) 
@@ -581,7 +719,8 @@ function scene:create( event )
     ghost1.anchorX = 0
     ghost1.anchorY = 0 
     ghost1.x = 512
-    ghost1.y = 0
+    ghost1.y = 80
+    ghost1.myName = "ghost1"
     
 
 -----------------------------------------------------------------
@@ -590,9 +729,14 @@ function scene:create( event )
     -- add collision event listeners
     pacGuy.collision = onLocalCollision
     pacGuy:addEventListener( "collision", pacGuy)
-
+    ball1L.collision = onLocalCollision
+    ball1L:addEventListener( "collision", ball1L)
+    ball2L.collision = onLocalCollision
+    ball2L:addEventListener( "collision", ball2L)
+    ball3L.collision = onLocalCollision
+    ball3L:addEventListener( "collision", ball3L)
    
-    
+        
     -- Send the background image to the back layer so all other objects can be on top
     
 
@@ -618,6 +762,10 @@ function scene:create( event )
     sceneGroup:insert( wall18 )
     sceneGroup:insert( wall19 )
     sceneGroup:insert( wall20 )
+    sceneGroup:insert( wall21 )
+    sceneGroup:insert( wall22 )
+    sceneGroup:insert( wall23 )
+    sceneGroup:insert( wall24 )
 
     sceneGroup:insert( endGateR )
     sceneGroup:insert( endGateL )
@@ -635,6 +783,10 @@ function scene:create( event )
     sceneGroup:insert( ball1L )
     sceneGroup:insert( ball2L )
     sceneGroup:insert( ball3L )
+    sceneGroup:insert( ball1R )
+    sceneGroup:insert( ball2R )
+    sceneGroup:insert( ball3R )
+    sceneGroup:insert( ghost1 )
 
 
 
@@ -703,7 +855,6 @@ function scene:show( event )
         -- activate the joystick
         AddPhysicsBodies()
         analogStick:activate()
-
         -----------------------------------------------------------------------------------------
         -- EVENT LISTENERS
         -----------------------------------------------------------------------------------------
@@ -716,9 +867,9 @@ function scene:show( event )
         Runtime:addEventListener("enterFrame", WinGate)
         Runtime:addEventListener("enterFrame", FireBallSetUp)
         Runtime:addEventListener("enterFrame", Ghost1Move)
-        Runtime:addEventListener("enterFrame", Ghost1Move2)
+        Runtime:addEventListener("enterFrame", OnCollision)
+        Runtime:addEventListener("enterFrame", AddCollisionListeners)
     end
-
 end  --function scene:show( event )
 
 -----------------------------------------------------------------------------------------
@@ -752,7 +903,8 @@ function scene:hide( event )
         Runtime:removeEventListener( "enterFrame", LeftToRightGate )
         Runtime:removeEventListener( "enterFrame", RightToLeftGate )
         Runtime:removeEventListener( "enterFrame", Ghost1Move )
-        Runtime:removeEventListener( "enterFrame", Ghost1Move2 )
+        Runtime:removeEventListener( "enterFrame", OnCollision )
+        Runtime:removeEventListener( "enterFrame", RemoveCollisionListeners )
 
         Runtime:removeEventListener( "enterFrame", WinGate)
         -- Removing the listener which listens for the usage of the joystick
@@ -762,10 +914,8 @@ function scene:hide( event )
         
         RemovePhysicsBodies()
         -- start the physics engine
-        physics.stop()
-        
+        physics.stop()   
     end
-
 end --function scene:hide( event )
 
 -----------------------------------------------------------------------------------------
