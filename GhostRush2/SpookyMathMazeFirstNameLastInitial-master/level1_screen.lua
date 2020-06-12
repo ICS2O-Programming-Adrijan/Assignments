@@ -230,56 +230,6 @@ local function Ghost1Move()
     end
 end
 
-local function OnCollision()
-    if ( event.phase == "began" ) then
-
-        
-
-        if  (event.target.myName == "ball1L") or 
-            (event.target.myName == "ball2L") or
-            (event.target.myName == "ball3L") or
-            (event.target.myName == "ball1R") or 
-            (event.target.myName == "ball2R") or
-            (event.target.myName == "ghost1") or
-            (event.target.myName == "ball3R") then
-            composer.gotoScene("you_Lose")
-        end
-    end
-end
-
-local function AddCollisionListeners()
-    -- if character collides with ball, onCollision will be called
-    ghost1.collision = onCollision
-    ghost1:addEventListener( "collision" )
-
-
-    -- if character collides with ball, onCollision will be called    
-    ball1L.collision = onCollision
-    ball1L:addEventListener( "collision" )
-    ball2L.collision = onCollision
-    ball2L:addEventListener( "collision" )
-    ball3L.collision = onCollision
-    ball3L:addEventListener( "collision" )
-    
-    ball1R.collision = onCollision
-    ball1R:addEventListener( "collision" )
-    ball2R.collision = onCollision
-    ball2R:addEventListener( "collision" )
-    ball3R.collision = onCollision
-    ball3R:addEventListener( "collision" )
-end
-
-local function RemoveCollisionListeners()
-    ghost1:removeEventListener( "collision" )
-    ball1L:removeEventListener( "collision" )
-    ball2L:removeEventListener( "collision" )
-    ball3L:removeEventListener( "collision" )
-
-    ball1R:removeEventListener( "collision" )
-    ball2R:removeEventListener( "collision" )
-    ball3R:removeEventListener( "collision")
-
-end
 
 
 -- Creating a function which limits the characters' movement to the visible screen
@@ -867,8 +817,6 @@ function scene:show( event )
         Runtime:addEventListener("enterFrame", WinGate)
         Runtime:addEventListener("enterFrame", FireBallSetUp)
         Runtime:addEventListener("enterFrame", Ghost1Move)
-        Runtime:addEventListener("enterFrame", OnCollision)
-        Runtime:addEventListener("enterFrame", AddCollisionListeners)
     end
 end  --function scene:show( event )
 
@@ -903,8 +851,7 @@ function scene:hide( event )
         Runtime:removeEventListener( "enterFrame", LeftToRightGate )
         Runtime:removeEventListener( "enterFrame", RightToLeftGate )
         Runtime:removeEventListener( "enterFrame", Ghost1Move )
-        Runtime:removeEventListener( "enterFrame", OnCollision )
-        Runtime:removeEventListener( "enterFrame", RemoveCollisionListeners )
+        
 
         Runtime:removeEventListener( "enterFrame", WinGate)
         -- Removing the listener which listens for the usage of the joystick
