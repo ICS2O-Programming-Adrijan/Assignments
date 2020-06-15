@@ -662,32 +662,32 @@ function scene:create( event )
     rightGateWall2.y = 400
 
     --BALLS---------------------------------------------
-    ball1L = display.newImageRect("Images/fireBall.png", 40, 40)
+    ball1L = display.newImageRect("Images/fireball.png", 40, 40)
     ball1L.x = 400
     ball1L.y = 600
     ball1L.myName = "ball1L"
 
-    ball2L = display.newImageRect("Images/fireBall.png", 40, 40)
+    ball2L = display.newImageRect("Images/fireball.png", 40, 40)
     ball2L.x = 150
     ball2L.y = 450
     ball2L.myName = "ball2L"
 
-    ball3L = display.newImageRect("Images/fireBall.png", 40, 40)
+    ball3L = display.newImageRect("Images/fireball.png", 40, 40)
     ball3L.x = 500
     ball3L.y = 300   
     ball1L.myName = "ball3L"
 
-    ball1R = display.newImageRect("Images/fireBall.png", 40, 40)
+    ball1R = display.newImageRect("Images/fireball.png", 40, 40)
     ball1R.x = 600
     ball1R.y = 200 
     ball1R.myName = "ball1R"
 
-    ball2R = display.newImageRect("Images/fireBall.png", 40, 40)
+    ball2R = display.newImageRect("Images/fireball.png", 40, 40)
     ball2R.x = 600
     ball2R.y = 200 
     ball2R.myName = "ball2R"
 
-    ball3R = display.newImageRect("Images/fireBall.png", 40, 40)
+    ball3R = display.newImageRect("Images/fireball.png", 40, 40)
     ball3R.x = 600
     ball3R.y = 200 
     ball3R.myName = "ball3R"
