@@ -230,20 +230,26 @@ local function Ghost1Move()
     end
 end
 
-local function OnCollision()
+local function onCollision( self, event )
+    -- for testing purposes
+    --print( event.target )        --the first object in the collision
+    --print( event.other )         --the second object in the collision
+    --print( event.selfElement )   --the element (number) of the first object which was hit in the collision
+    --print( event.otherElement )  --the element (number) of the second object which was hit in the collision
+    --print( event.target.myName .. ": collision began with " .. event.other.myName )
+
     if ( event.phase == "began" ) then
+
         
-        if  (event.target.myName == "ball1L") or
+
+        if  (event.target.myName == "ball1L") or 
             (event.target.myName == "ball2L") or
-            (event.target.myName == "ball3L") or
-            (event.target.myName == "ball1R") or
-            (event.target.myName == "ball2R") or
-            (event.target.myName == "ghost1") or
-            (event.target.myName == "ball3R") then
+            (event.target.myName == "ball3L") then
             composer.gotoScene("you_Lose")
         end
-    end
+    end        
 end
+
 local function AddCollisionListeners()
     -- if character collides with ball, onCollision will be called
     ghost1.collision = onCollision
@@ -263,6 +269,9 @@ local function AddCollisionListeners()
     ball2R:addEventListener( "collision" )
     ball3R.collision = onCollision
     ball3R:addEventListener( "collision" )
+
+    pacGuy.collision = onCollision
+    pacGuy:addEventListener( "collision")
 end
 local function RemoveCollisionListeners()
     ghost1:removeEventListener( "collision" )
@@ -722,15 +731,7 @@ function scene:create( event )
 -----------------------------------------------------------------
   
 
-    -- add collision event listeners
-    pacGuy.collision = onLocalCollision
-    pacGuy:addEventListener( "collision", pacGuy)
-    ball1L.collision = onLocalCollision
-    ball1L:addEventListener( "collision", ball1L)
-    ball2L.collision = onLocalCollision
-    ball2L:addEventListener( "collision", ball2L)
-    ball3L.collision = onLocalCollision
-    ball3L:addEventListener( "collision", ball3L)
+   
    
         
     -- Send the background image to the back layer so all other objects can be on top
