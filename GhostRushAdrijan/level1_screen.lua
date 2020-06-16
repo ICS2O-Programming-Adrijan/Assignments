@@ -865,8 +865,8 @@ function scene:show( event )
         Runtime:addEventListener("enterFrame", FireBallSetUp)
         Runtime:addEventListener("enterFrame", Ghost1Move)
         Runtime:addEventListener("enterFrame", onCollision)
-        Runtime:addEventListener("enterFrame", AddCollisionListeners)
-        Runtime:addEventListener("enterFrame", RemoveCollisionListeners)
+        AddCollisionListeners()
+        RemoveCollisionListeners()
     end
 end  --function scene:show( event )
 
