@@ -934,11 +934,9 @@ function scene:show( event )
         Runtime:addEventListener("enterFrame", WinGate)
         Runtime:addEventListener("enterFrame", FireBallSetUp)
         Runtime:addEventListener("enterFrame", Ghost1Move)
-        Runtime:addEventListener("enterFrame", onCollision)
         Runtime:addEventListener("enterFrame", RocketPartsSetup)
-       
+        onCollision()
         AddCollisionListeners()
-        RemoveCollisionListeners()
     end
 end  --function scene:show( event )
 
@@ -973,12 +971,9 @@ function scene:hide( event )
         Runtime:removeEventListener( "enterFrame", LeftToRightGate )
         Runtime:removeEventListener( "enterFrame", RightToLeftGate )
         Runtime:removeEventListener( "enterFrame", Ghost1Move )
-        Runtime:removeEventListener( "enterFrame", onCollision )
-        Runtime:removeEventListener( "enterFrame", AddCollisionListeners )
-        Runtime:removeEventListener( "enterFrame", RemoveCollisionListeners )
         Runtime:removeEventListener( "enterFrame", RocketPartsSetup )
 
-
+        RemoveCollisionListeners()
         Runtime:removeEventListener( "enterFrame", WinGate)
         -- Removing the listener which listens for the usage of the joystick
         analogStick:removeEventListener( "touch", Movement )
