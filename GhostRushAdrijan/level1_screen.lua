@@ -41,6 +41,12 @@ local ballSetUp
 local ghost1
 local scrollSpeed5 = 5
 local ghostSetUp
+
+local rocketBody
+local roketEngine
+local rocketButtons
+local rocketPartsSetup
+
 -- The local variables for this scene
 userLives = 3
 lvNumber = 1
@@ -190,6 +196,40 @@ local function FireBallSetUp()
         ball3R.y = 600
     end
 end
+
+    rocketPartsSetUp = math.random(1, 4)
+
+
+local function RocketPartsSetup()
+    if (rocketPartsSetUp == 1) then 
+        rocketBody.x = 60
+        rocketBody.y = 100
+        rocketEngine.x = 1000
+        rocketEngine.y = 700
+        rocketButtons.x = 600
+        rocketButtons.y = 200
+    elseif (rocketPartsSetUp == 2) then
+        rocketBody.x = 512
+        rocketBody.y = 500
+        rocketEngine.x = 150
+        rocketEngine.y = 715
+        rocketButtons.x = 1100
+        rocketButtons.y = 100
+    elseif (rocketPartsSetUp == 3) then
+        rocketBody.x = 1100
+        rocketBody.y = 400
+        rocketEngine.x = 300
+        rocketEngine.y = 500
+        rocketButtons.x = 650
+        rocketButtons.y = 500
+    elseif (rocketPartsSetUp == 4) then
+       rocketBody.x = 800
+        rocketBody.y = 200
+        rocketEngine.x = 100
+        rocketEngine.y = 500
+        rocketButtons.x = 512
+        rocketButtons.y = 300
+    end
 
 
 ghostSetUp = math.random(1,2)
@@ -425,6 +465,9 @@ local function AddPhysicsBodies()
     physics.addBody(ball1R, "dynamic", {friction=1}) 
     physics.addBody(ball2R, "dynamic", {friction=1}) 
     physics.addBody(ball3R, "dynamic", {friction=1}) 
+    physics.addBody(rocketBody, "dynamic", {friction=1}) 
+    physics.addBody(rocketEngine, "dynamic", {friction=1}) 
+    physics.addBody(rocketButtons, "dynamic", {friction=1}) 
 
 end
 
@@ -475,6 +518,9 @@ local function RemovePhysicsBodies()
     physics.removeBody(ball1R)
     physics.removeBody(ball2R)
     physics.removeBody(ball3R)
+    physics.removeBody(rocketBody)
+    physics.removeBody(rocketEngine)
+    physics.removeBody(rocketButtons)
 
 end
 
@@ -726,6 +772,27 @@ function scene:create( event )
     ghost1.x = 512
     ghost1.y = 80
     ghost1.myName = "ghost1"
+
+ rocketBody = display.newImageRect("Images/rocketBody.png", 50, 50)
+    rocketBody.anchorX = 0
+    rocketBody.anchorY = 0 
+    rocketBody.x = 100
+    rocketBody.y = 100
+    rocketBody.myName = "rocketBody"
+
+    rocketEngine = display.newImageRect("Images/engine.png", 50, 50)
+    rocketEngine.anchorX = 0
+    rocketEngine.anchorY = 0 
+    rocketEngine.x = 100
+    rocketEngine.y = 100
+    rocketEngine.myName = "rocketEngine"
+
+    rocketButtons = display.newImageRect("Images/Buttons.png", 75, 50)
+    rocketButtons.anchorX = 0
+    rocketButtons.anchorY = 0 
+    rocketButtons.x = 100
+    rocketButtons.y = 100
+    rocketButtons.myName = "rocketButtons"
     
 
 -----------------------------------------------------------------
@@ -784,6 +851,9 @@ function scene:create( event )
     sceneGroup:insert( ball2R )
     sceneGroup:insert( ball3R )
     sceneGroup:insert( ghost1 )
+    sceneGroup:insert( rocketBody )
+    sceneGroup:insert( rocketEngine )
+    sceneGroup:insert( rocketButtons )
 
 
 
@@ -865,6 +935,8 @@ function scene:show( event )
         Runtime:addEventListener("enterFrame", FireBallSetUp)
         Runtime:addEventListener("enterFrame", Ghost1Move)
         Runtime:addEventListener("enterFrame", onCollision)
+        Runtime:addEventListener("enterFrame", RocketPartsSetup)
+       
         AddCollisionListeners()
         RemoveCollisionListeners()
     end
@@ -904,6 +976,7 @@ function scene:hide( event )
         Runtime:removeEventListener( "enterFrame", onCollision )
         Runtime:removeEventListener( "enterFrame", AddCollisionListeners )
         Runtime:removeEventListener( "enterFrame", RemoveCollisionListeners )
+        Runtime:removeEventListener( "enterFrame", RocketPartsSetup )
 
 
         Runtime:removeEventListener( "enterFrame", WinGate)
