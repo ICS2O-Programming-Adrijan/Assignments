@@ -28,6 +28,15 @@ sceneName = "level1_screen"
 local scene = composer.newScene( sceneName )
 
 -----------------------------------------------------------------------------------------
+-- DECLARATION GLOBAL VARIABLES
+-----------------------------------
+-- The local variables for this scene
+userLives = 3
+lvNumber = 1
+restarted = 0
+movingLeft = true
+
+-----------------------------------------------------------------------------------------
 -- DECLARATION LOCAL VARIABLES
 -----------------------------------------------------------------------------------------
 --Fire balls
@@ -47,10 +56,7 @@ local roketEngine
 local rocketButtons
 local rocketPartsSetup
 
--- The local variables for this scene
-userLives = 3
-lvNumber = 1
-restarted = 0
+
 local bkg_image
 local analogStick
 local facingWhichDirection = "right"
@@ -134,9 +140,10 @@ local function WinGate()
         end
     end
 end
-    ballSetUp = math.random(1, 4)
 
 local function FireBallSetUp()
+    ballSetUp = math.random(1, 4)
+
     if (ballSetUp == 1) then 
        --left side balls
         ball1L.x = 350
@@ -197,10 +204,11 @@ local function FireBallSetUp()
     end
 end
 
-    rocketPartsSetUp = math.random(1, 4)
 
 
 local function RocketPartsSetup()
+    rocketPartsSetUp = math.random(1, 4)
+
     if (rocketPartsSetUp == 1) then 
         rocketBody.x = 60
         rocketBody.y = 100
@@ -230,11 +238,8 @@ local function RocketPartsSetup()
         rocketButtons.x = 512
         rocketButtons.y = 300
     end
+end
 
-
-ghostSetUp = math.random(1,2)
-
-movingLeft = true
 local function Ghost1Move()
     
     if (ghostSetUp == 1) then
@@ -284,8 +289,19 @@ local function onCollision( self, event )
 
         if  (event.target.myName == "ball1L") or 
             (event.target.myName == "ball2L") or
-            (event.target.myName == "ball3L") then
+            (event.target.myName == "ball3L") or
+            (event.target.myName == "ball1R") or 
+            (event.target.myName == "ball2R") or
+            (event.target.myName == "ball3R") or 
+            (event.target.myName == "ghost1") then
+ 
             composer.gotoScene("you_Lose")
+        elseif  (event.target.myName == "rocketBody") then
+            rocketBody.isVisible = false
+        elseif (event.target.myName == "rocketButtons") then
+            rocketButtons.isVisible = false
+        elseif  (event.target.myName == "rocketEngine") then
+            rocketEngine.isVisible = false
         end
     end        
 end
@@ -312,6 +328,13 @@ local function AddCollisionListeners()
 
     pacGuy.collision = onCollision
     pacGuy:addEventListener( "collision")
+
+    rocketEngine.collision = onCollision
+    rocketEngine:addEventListener( "collision")
+    rocketButtons.collision = onCollision
+    rocketButtons:addEventListener( "collision")
+    rocketBody.collision = onCollision
+    rocketBody:addEventListener( "collision")
 end
 local function RemoveCollisionListeners()
     ghost1:removeEventListener( "collision" )
@@ -321,6 +344,9 @@ local function RemoveCollisionListeners()
     ball1R:removeEventListener( "collision" )
     ball2R:removeEventListener( "collision" )
     ball3R:removeEventListener( "collision")
+    rocketEngine:removeEventListener( "collision")
+    rocketBody:removeEventListener( "collision")
+    rocketButtons:removeEventListener( "collision")
 end
 
 
@@ -365,7 +391,7 @@ local function RuntimeEvents( )
         -----------------------------------------------------------------------------------------
 
         -- Checking if the joystick is being held
-        if joystickPressed == true then
+        if (joystickPressed == true) then
 
             -- Applying the force of the joystick to move the flower
             analogStick:move( pacGuy, 0.55 )
@@ -380,10 +406,10 @@ local function RuntimeEvents( )
         -----------------------------------------------------------------------------------------
 
         -- Checking if the joystick is pointing the opposite direction of the character
-        if facingWhichDirection == "left" then
+        if (facingWhichDirection == "left") then
             
             -- Checking if the joystick is pointing to the right
-            if direction == 1 or direction == 2 or direction == 8 then
+            if (direction == 1) or (direction == 2) or (direction == 8) then
 
                 -- Flipping the controlled charcter's direction
                 --flower:scale( -1, 1 )
@@ -397,11 +423,11 @@ local function RuntimeEvents( )
         -----------------------------------------------------------------------------------------
 
         -- Checking if the joystick is pointing the opposite direction of the character
-        if facingWhichDirection == "right" then
+        if (facingWhichDirection == "right") then
 
 
             -- Checking if the joystick is pointing to the right
-            if direction == 4 or direction == 5 or direction == 6 then
+            if (direction == 4) or (direction == 5) or (direction == 6) then
 
                 -- Flipping the controlled charcter's direction
                 --flower:scale( -1, 1 )
@@ -527,12 +553,12 @@ end
 -- Creating Joystick function that determines whether or not joystick is pressed
 local function Movement( touch )
 
-    if touch.phase == "began" then
+    if (touch.phase == "began") then
 
         -- Setting a boolean to true to simulate the holding of a button
         joystickPressed = true
 
-    elseif touch.phase == "ended" then
+    elseif (touch.phase == "ended") then
 
         -- Setting a boolean to false to simulate the release of a held button
         joystickPressed = false
@@ -914,7 +940,9 @@ function scene:show( event )
 
         
 
-               
+        ghostSetUp = math.random(1,2)
+
+        movingLeft = true  
         -- start the physics engine
         physics.start()
         physics.setGravity( 0, 0 )
@@ -932,10 +960,10 @@ function scene:show( event )
         Runtime:addEventListener("enterFrame", LeftToRightGate)
         Runtime:addEventListener("enterFrame", RightToLeftGate)
         Runtime:addEventListener("enterFrame", WinGate)
-        Runtime:addEventListener("enterFrame", FireBallSetUp)
         Runtime:addEventListener("enterFrame", Ghost1Move)
-        Runtime:addEventListener("enterFrame", RocketPartsSetup)
-        onCollision()
+
+        FireBallSetUp()
+        RocketPartsSetup()
         AddCollisionListeners()
     end
 end  --function scene:show( event )
