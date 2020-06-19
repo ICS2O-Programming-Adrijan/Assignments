@@ -48,7 +48,7 @@ local ball2R
 local ball3R
 local ballSetUp
 local ghost1
-local scrollSpeed5 = 5
+local scrollSpeed5 = 3
 local ghostSetUp
 
 local rocketBody
@@ -101,6 +101,14 @@ local wall22
 local wall23 
 local wall24
 
+-- limit walls 
+local limitWallL
+local limitWallL2
+local limitWallB
+local limitWallB2
+local limitWallR
+local limitWallR2
+
 
 -- Gate walls
 local leftGateWall1
@@ -135,7 +143,13 @@ local function WinGate()
     if (pacGuy.y < 0) then
         if (pacGuy.x < 574) then
             if (pacGuy.x > 455) then
-                composer.gotoScene("you_Win")
+                if (rocketBody.isVisible == false) then
+                    if (rocketButtons.isVisible == false) then
+                        if (rocketEngine.isVisible == false) then
+                            composer.gotoScene("you_Win")
+                        end
+                    end
+                end
             end
         end
     end
@@ -212,7 +226,7 @@ local function RocketPartsSetup()
     if (rocketPartsSetUp == 1) then 
         rocketBody.x = 60
         rocketBody.y = 100
-        rocketEngine.x = 1000
+        rocketEngine.x = 900
         rocketEngine.y = 700
         rocketButtons.x = 600
         rocketButtons.y = 200
@@ -221,10 +235,10 @@ local function RocketPartsSetup()
         rocketBody.y = 500
         rocketEngine.x = 150
         rocketEngine.y = 715
-        rocketButtons.x = 1100
+        rocketButtons.x = 900
         rocketButtons.y = 100
     elseif (rocketPartsSetUp == 3) then
-        rocketBody.x = 1100
+        rocketBody.x = 900
         rocketBody.y = 400
         rocketEngine.x = 300
         rocketEngine.y = 500
@@ -275,6 +289,24 @@ local function Ghost1Move()
     end
 end
 
+local function RemovePhysicsBodiesRocketBody()
+    rocketBody.isVisible = false
+    physics.removeBody(rocketBody)
+    rocketBody:removeEventListener( "collision" )
+end
+
+local function RemovePhysicsBodiesRocketButtons()
+    rocketButtons.isVisible = false
+    physics.removeBody(rocketButtons)
+    rocketButtons:removeEventListener( "collision" )
+end
+
+local function RemovePhysicsBodiesRocketEngine()
+    rocketEngine.isVisible = false
+    physics.removeBody(rocketEngine)
+    rocketEngine:removeEventListener( "collision" )
+end
+
 local function onCollision( self, event )
     -- for testing purposes
     --print( event.target )        --the first object in the collision
@@ -297,21 +329,16 @@ local function onCollision( self, event )
  
             composer.gotoScene("you_Lose")
         elseif  (event.target.myName == "rocketBody") then
-            rocketBody.isVisible = false
+           timer.performWithDelay(200, RemovePhysicsBodiesRocketBody)
         elseif (event.target.myName == "rocketButtons") then
-            rocketButtons.isVisible = false
+            timer.performWithDelay(200, RemovePhysicsBodiesRocketButtons)
         elseif  (event.target.myName == "rocketEngine") then
-            rocketEngine.isVisible = false
+            timer.performWithDelay(200, RemovePhysicsBodiesRocketEngine)
         end
     end        
 end
 
 local function AddCollisionListeners()
-    -- if character collides with ball, onCollision will be called
-    ghost1.collision = onCollision
-    ghost1:addEventListener( "collision" )
-
-    -- if character collides with ball, onCollision will be called  
     ball1L.collision = onCollision
     ball1L:addEventListener( "collision" )
     ball2L.collision = onCollision
@@ -326,15 +353,20 @@ local function AddCollisionListeners()
     ball3R.collision = onCollision
     ball3R:addEventListener( "collision" )
 
-    pacGuy.collision = onCollision
-    pacGuy:addEventListener( "collision")
-
     rocketEngine.collision = onCollision
     rocketEngine:addEventListener( "collision")
+
     rocketButtons.collision = onCollision
     rocketButtons:addEventListener( "collision")
+
     rocketBody.collision = onCollision
     rocketBody:addEventListener( "collision")
+
+    ghost1.collision = onCollision
+    ghost1:addEventListener( "collision" )
+
+    pacGuy.collision = onCollision
+    pacGuy:addEventListener( "collision")
 end
 local function RemoveCollisionListeners()
     ghost1:removeEventListener( "collision" )
@@ -351,35 +383,6 @@ end
 
 
 
-
--- Creating a function which limits the characters' movement to the visible screen
-
---local function ScreenLimit( character )   
-
-    -- Checking if the the character is about to go off the right side of the screen
-   -- if character.x > ( display.contentWidth - character.width / 2 ) then
-            
-       -- character.x = character.x - 7.5
-
-    -- Checking if the character is about to go off the left side of the screen
-   -- elseif character.x < ( character.width / 2 ) then
-
-        --character.x = character.x + 7.5
-
-    -----------------------------------------------------------------------------------------
-
-    -- Checking if the character is about to go off the bottom of the screen
-   -- elseif character.y > ( display.contentHeight - character.height / 2 ) then
-
-       -- character.y = character.y - 7.5
-
-    -- Checking if the character is about to off the top of the screen
-   -- elseif character.y < ( character.height / 2 ) then
-
-       -- character.y = character.y + 7.5
-
-    --end
---end
  
 local function RuntimeEvents( )
 
@@ -470,31 +473,45 @@ local function AddPhysicsBodies()
     physics.addBody(wall24, "static", {friction = 0})
 
     physics.addBody(startWall, "static", {friction = 0})
+
     physics.addBody(endWallR1, "static", {friction = 0})
     physics.addBody(endWallR2, "static", {friction = 0})
     physics.addBody(endWallR3, "static", {friction = 0})
     physics.addBody(endWallL1, "static", {friction = 0})
     physics.addBody(endWallL2, "static", {friction = 0})
     physics.addBody(endWallL3, "static", {friction = 0})
+
     physics.addBody(endGateL, "static", {friction = 0})
     physics.addBody(endGateR, "static", {friction = 0})
+
     physics.addBody(leftGateWall1, "static", {friction = 0})
     physics.addBody(leftGateWall2, "static", {friction = 0})
     physics.addBody(rightGateWall1, "static", {friction = 0})
     physics.addBody(rightGateWall2, "static", {friction = 0})
+
     physics.addBody(pacGuy, "dynamic", {friction = 0})
     pacGuy.isFixedRotation = true 
-    physics.addBody(ball1L, "dynamic", {friction=1}) 
-    physics.addBody(ball2L, "dynamic", {friction=1}) 
-    physics.addBody(ball3L, "dynamic", {friction=1}) 
-    physics.addBody(ghost1, "dynamic", {friction=1}) 
-    physics.addBody(ball1R, "dynamic", {friction=1}) 
-    physics.addBody(ball2R, "dynamic", {friction=1}) 
-    physics.addBody(ball3R, "dynamic", {friction=1}) 
-    physics.addBody(rocketBody, "dynamic", {friction=1}) 
-    physics.addBody(rocketEngine, "dynamic", {friction=1}) 
-    physics.addBody(rocketButtons, "dynamic", {friction=1}) 
 
+    physics.addBody(ball1L, "static", {friction=1}) 
+    physics.addBody(ball2L, "static", {friction=1}) 
+    physics.addBody(ball3L, "static", {friction=1}) 
+
+    physics.addBody(ghost1, "static", {friction=1})
+
+    physics.addBody(ball1R, "static", {friction=1}) 
+    physics.addBody(ball2R, "static", {friction=1}) 
+    physics.addBody(ball3R, "static", {friction=1}) 
+
+    physics.addBody(rocketBody, "static", {friction=1}) 
+    physics.addBody(rocketEngine, "static", {friction=1}) 
+    physics.addBody(rocketButtons, "static", {friction=1}) 
+
+    physics.addBody(limitWallL, "static", {friction=1}) 
+    physics.addBody(limitWallL2, "static", {friction=1}) 
+    physics.addBody(limitWallR, "static", {friction=1}) 
+    physics.addBody(limitWallR2, "static", {friction=1}) 
+    physics.addBody(limitWallB, "static", {friction=1}) 
+    physics.addBody(limitWallB2, "static", {friction=1}) 
 end
 
 local function RemovePhysicsBodies()
@@ -524,29 +541,45 @@ local function RemovePhysicsBodies()
     physics.removeBody(wall24)
 
     physics.removeBody(startWall)
+
     physics.removeBody(endWallL1)
     physics.removeBody(endWallL2)
     physics.removeBody(endWallL3)
     physics.removeBody(endWallR1)
     physics.removeBody(endWallR2)
     physics.removeBody(endWallR3)
+
     physics.removeBody(endGateR)
     physics.removeBody(endGateL)
+
     physics.removeBody(leftGateWall1)
     physics.removeBody(leftGateWall2)
     physics.removeBody(rightGateWall1)
     physics.removeBody(rightGateWall2)
+
     physics.removeBody(pacGuy)
+
     physics.removeBody(ball1L)
     physics.removeBody(ball2L)
     physics.removeBody(ball3L)
+
     physics.removeBody(ghost1)
+
     physics.removeBody(ball1R)
     physics.removeBody(ball2R)
     physics.removeBody(ball3R)
+
     physics.removeBody(rocketBody)
     physics.removeBody(rocketEngine)
     physics.removeBody(rocketButtons)
+
+    physics.removeBody(limitWallL)
+    physics.removeBody(limitWallL2)
+    physics.removeBody(limitWallR)
+    physics.removeBody(limitWallR2)
+    physics.removeBody(limitWallB)
+    physics.removeBody(limitWallB2)
+
 
 end
 
@@ -564,16 +597,10 @@ local function Movement( touch )
         joystickPressed = false
     end
 end --local function Movement( touch )
+
 -----------------------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
+-- GLOBAL SCENE FUNCTIONS
+-----------------------------------------------------------------------------------------
 -- The function called when the screen doesn't exist
 function scene:create( event )
 
@@ -585,7 +612,7 @@ function scene:create( event )
     -----------------------------------------------------------------------------------------
 
     -- Insert the background image
-    bkg_image = display.newImageRect("Images/lvl1Bkg.png", display.contentWidth, display.contentHeight)
+    bkg_image = display.newImageRect("Images/lvlScreen.png", display.contentWidth, display.contentHeight)
     bkg_image.x = display.contentCenterX
     bkg_image.y = display.contentCenterY
     bkg_image.width = display.contentWidth
@@ -741,6 +768,34 @@ function scene:create( event )
     rightGateWall2 = display.newImageRect("Images/wall1.png", 80, 25)
     rightGateWall2.x = 1000
     rightGateWall2.y = 400
+    --LIMIT WALLS------------------------------------------------------
+    limitWallL = display.newImageRect("Images/wall2.png", 25, 350)
+    limitWallL.x = 0
+    limitWallL.y = 215
+
+    limitWallL2 = display.newImageRect("Images/wall2.png", 25, 300)
+    limitWallL2.x = 0
+    limitWallL2.y = 660
+
+    limitWallR = display.newImageRect("Images/wall2.png", 25, 350)
+    limitWallR.x = 1024
+    limitWallR.y = 215
+
+    limitWallR2 = display.newImageRect("Images/wall2.png", 25, 350)
+    limitWallR2.x = 1024
+    limitWallR2.y = 660
+
+    limitWallL = display.newImageRect("Images/wall2.png", 25, 300)
+    limitWallL.x = 1024
+    limitWallL.y = 660
+
+    limitWallB = display.newImageRect("Images/wall1.png", 400, 25)
+    limitWallB.x = 200
+    limitWallB.y = 768
+
+    limitWallB2 = display.newImageRect("Images/wall1.png", 400, 25)
+    limitWallB2.x = 824
+    limitWallB2.y = 768
 
     --BALLS---------------------------------------------
     ball1L = display.newImageRect("Images/fireball.png", 40, 40)
@@ -827,10 +882,9 @@ function scene:create( event )
    
    
         
-    -- Send the background image to the back layer so all other objects can be on top
     
 
-        -- Insert background image into the scene group in order to ONLY be associated with this scene
+    -- Insert background image into the scene group in order to ONLY be associated with this scene
     sceneGroup:insert( bkg_image )
     sceneGroup:insert( analogStick )   
     sceneGroup:insert( wall1 )
@@ -857,56 +911,46 @@ function scene:create( event )
     sceneGroup:insert( wall23 )
     sceneGroup:insert( wall24 )
 
+    sceneGroup:insert( startWall )
+
     sceneGroup:insert( endGateR )
     sceneGroup:insert( endGateL )
+
     sceneGroup:insert( endWallL1 )
     sceneGroup:insert( endWallL2 )
     sceneGroup:insert( endWallL3 )
     sceneGroup:insert( endWallR1 )
     sceneGroup:insert( endWallR2 )
     sceneGroup:insert( endWallR3 )
+
     sceneGroup:insert( rightGateWall1 )
     sceneGroup:insert( leftGateWall1 )
     sceneGroup:insert( rightGateWall2 )
     sceneGroup:insert( leftGateWall2 )
+
     sceneGroup:insert( pacGuy )
+
     sceneGroup:insert( ball1L )
     sceneGroup:insert( ball2L )
     sceneGroup:insert( ball3L )
     sceneGroup:insert( ball1R )
     sceneGroup:insert( ball2R )
     sceneGroup:insert( ball3R )
+
     sceneGroup:insert( ghost1 )
+
     sceneGroup:insert( rocketBody )
     sceneGroup:insert( rocketEngine )
     sceneGroup:insert( rocketButtons )
 
-
-
-
-
-
-
+    sceneGroup:insert( limitWallL )
+    sceneGroup:insert( limitWallL2 )
+    sceneGroup:insert( limitWallR )
+    sceneGroup:insert( limitWallR2 )
+    sceneGroup:insert( limitWallB )
+    sceneGroup:insert( limitWallB2 )
 end --function scene:create( event )
 -----------------------------------------------------------------
-
-
------------------------------------------------------------------------------------------
--- GLOBAL SCENE FUNCTIONS
------------------------------------------------------------------------------------------
---This function causes the pumpkins to move up then down.
--- Function to move top
---function movePumpkin1 ()
-  --  timer.performWithDelay(800, movePumkin1Down) 
-    --pumpkin1.y = pumpkin1.y - 2    
---end
-  
---function movePumkin1Down()
-  -- pumpkin1.y = pumpkin1.y + 2
---end   
-
-
-
 -----------------------------------------------------------------------------------------------
 -- The function called when the scene is issued to appear on screen
 function scene:show( event )
@@ -947,6 +991,9 @@ function scene:show( event )
         physics.start()
         physics.setGravity( 0, 0 )
 
+        FireBallSetUp()
+        RocketPartsSetup()
+
         -- activate the joystick
         AddPhysicsBodies()
         analogStick:activate()
@@ -962,8 +1009,7 @@ function scene:show( event )
         Runtime:addEventListener("enterFrame", WinGate)
         Runtime:addEventListener("enterFrame", Ghost1Move)
 
-        FireBallSetUp()
-        RocketPartsSetup()
+        
         AddCollisionListeners()
     end
 end  --function scene:show( event )

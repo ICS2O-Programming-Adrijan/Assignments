@@ -60,7 +60,7 @@ function scene:create( event )
     -----------------------------------------------------------------------------------------
 
     -- Insert the background image and set it to the center of the screen
-    instructionsImage = display.newImageRect("Images/InstructionsScreen.png", display.contentWidth, display.contentHeight)
+    instructionsImage = display.newImageRect("Images/Instructions.png", display.contentWidth, display.contentHeight)
     instructionsImage.x = display.contentCenterX
     instructionsImage.y = display.contentCenterY
     instructionsImage.width = display.contentWidth
