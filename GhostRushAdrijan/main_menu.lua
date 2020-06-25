@@ -54,13 +54,15 @@ local instructionsButton
 local muteButton
 local unmuteButton
 
-
-muteButton = display.newImageRect("Images/mute.png", 100, 100)
+-------------------------------------------------
+--GLOBAL VARIABLES
+----------------------------------------------
+muteButton = display.newImageRect("Images/unmute.png", 100, 100)
 muteButton.x = 50
 muteButton.y = 50
 muteButton.isVisible = true
 
-unmuteButton = display.newImageRect("Images/unmute.png", 100, 100)
+unmuteButton = display.newImageRect("Images/mute.png", 100, 100)
 unmuteButton.x = 50
 unmuteButton.y = 50
 unmuteButton.isVisible = false
@@ -290,6 +292,13 @@ function scene:hide( event )
     elseif ( phase == "did" ) then
         -- Called immediately after scene goes off screen.
         audio.stop(musicChannel)
+        muteButton:removeEventListener("touch", Mute)
+        unmuteButton:removeEventListener("touch", Unmute)
+
+
+        Runtime:removeEventListener("enterFrame", PlayMovement)
+
+        Runtime:removeEventListener("enterFrame", Background2Fade)
     end
 
 end -- function scene:hide( event )

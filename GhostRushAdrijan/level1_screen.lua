@@ -307,6 +307,10 @@ local function RemovePhysicsBodiesRocketEngine()
     rocketEngine:removeEventListener( "collision" )
 end
 
+local function YouLoseTransition()
+    composer.gotoScene("you_Lose")
+end
+
 local function onCollision( self, event )
     -- for testing purposes
     --print( event.target )        --the first object in the collision
@@ -326,14 +330,14 @@ local function onCollision( self, event )
             (event.target.myName == "ball2R") or
             (event.target.myName == "ball3R") or 
             (event.target.myName == "ghost1") then
- 
-            composer.gotoScene("you_Lose")
+            
+            timer.performWithDelay(50, YouLoseTransition)
         elseif  (event.target.myName == "rocketBody") then
-           timer.performWithDelay(200, RemovePhysicsBodiesRocketBody)
+           timer.performWithDelay(50, RemovePhysicsBodiesRocketBody)
         elseif (event.target.myName == "rocketButtons") then
-            timer.performWithDelay(200, RemovePhysicsBodiesRocketButtons)
+            timer.performWithDelay(50, RemovePhysicsBodiesRocketButtons)
         elseif  (event.target.myName == "rocketEngine") then
-            timer.performWithDelay(200, RemovePhysicsBodiesRocketEngine)
+            timer.performWithDelay(50, RemovePhysicsBodiesRocketEngine)
         end
     end        
 end
@@ -569,9 +573,7 @@ local function RemovePhysicsBodies()
     physics.removeBody(ball2R)
     physics.removeBody(ball3R)
 
-    physics.removeBody(rocketBody)
-    physics.removeBody(rocketEngine)
-    physics.removeBody(rocketButtons)
+    
 
     physics.removeBody(limitWallL)
     physics.removeBody(limitWallL2)
@@ -785,10 +787,6 @@ function scene:create( event )
     limitWallR2.x = 1024
     limitWallR2.y = 660
 
-    limitWallL = display.newImageRect("Images/wall2.png", 25, 300)
-    limitWallL.x = 1024
-    limitWallL.y = 660
-
     limitWallB = display.newImageRect("Images/wall1.png", 400, 25)
     limitWallB.x = 200
     limitWallB.y = 768
@@ -991,12 +989,9 @@ function scene:show( event )
         physics.start()
         physics.setGravity( 0, 0 )
 
-        FireBallSetUp()
-        RocketPartsSetup()
+        
 
-        -- activate the joystick
-        AddPhysicsBodies()
-        analogStick:activate()
+        
         -----------------------------------------------------------------------------------------
         -- EVENT LISTENERS
         -----------------------------------------------------------------------------------------
@@ -1008,8 +1003,11 @@ function scene:show( event )
         Runtime:addEventListener("enterFrame", RightToLeftGate)
         Runtime:addEventListener("enterFrame", WinGate)
         Runtime:addEventListener("enterFrame", Ghost1Move)
-
-        
+        -- activate the joystick
+        AddPhysicsBodies()
+        analogStick:activate()
+        FireBallSetUp()
+        RocketPartsSetup()
         AddCollisionListeners()
     end
 end  --function scene:show( event )
@@ -1040,7 +1038,6 @@ function scene:hide( event )
         analogStick:deactivate()
 
         -- Stopping the Runtime Events
-        Runtime:removeEventListener( "enterFrame", RuntimeEvents )
         Runtime:removeEventListener( "enterFrame", FireBallSetUp)
         Runtime:removeEventListener( "enterFrame", LeftToRightGate )
         Runtime:removeEventListener( "enterFrame", RightToLeftGate )

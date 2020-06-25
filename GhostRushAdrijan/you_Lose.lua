@@ -59,7 +59,7 @@ function scene:create( event )
     sceneGroup:insert( bkg_image )
 
       -- Creating Back Button
-    backButton = widget.newButton( 
+        backButton = widget.newButton( 
     {
         -- Setting Position
         x = display.contentWidth*1/8,
@@ -83,7 +83,7 @@ end --function scene:create( event )
 ------------------------------------------------------------------------------------------
 --Button functions.
 function BackTransition()
-    composer.gotoScene( "main_menu", {effect = "zoomOutInFadeRotate", time = 500})
+    composer.gotoScene( "main_menu")
 end
 
 
