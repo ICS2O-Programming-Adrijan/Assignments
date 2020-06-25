@@ -825,17 +825,6 @@ function scene:create( event )
     ball3R.x = 600
     ball3R.y = 200 
     ball3R.myName = "ball3R"
-
-    -- Creating Joystick
-    analogStick = joystick.new( 50, 75 ) 
-
-    -- Setting Position
-    analogStick.x = 125
-    analogStick.y = display.contentHeight - 125
-
-    -- Changing transparency
-    analogStick.alpha = 0.5
-
 -----------------------------------------------------------------
 --Adding in the character.
 
@@ -884,7 +873,6 @@ function scene:create( event )
 
     -- Insert background image into the scene group in order to ONLY be associated with this scene
     sceneGroup:insert( bkg_image )
-    sceneGroup:insert( analogStick )   
     sceneGroup:insert( wall1 )
     sceneGroup:insert( wall2 )
     sceneGroup:insert( wall3 )
@@ -1009,6 +997,16 @@ function scene:show( event )
         FireBallSetUp()
         RocketPartsSetup()
         AddCollisionListeners()
+        -------------------------------
+        --JOYSTICK 
+        ------------------------------
+        -- Creating Joystick
+        analogStick = joystick.new( 50, 75 ) 
+        -- Setting Position
+        analogStick.x = 125
+        analogStick.y = display.contentHeight - 125
+        -- Changing transparency
+        analogStick.alpha = 0.5
     end
 end  --function scene:show( event )
 
@@ -1054,6 +1052,13 @@ function scene:hide( event )
         RemovePhysicsBodies()
         -- start the physics engine
         physics.stop()   
+
+        -----------------------------------
+        --JOYSTICK 
+        ------------------------------------
+        analogStick:deactivate()
+
+        display.remove(analogStick)
     end
 end --function scene:hide( event )
 
