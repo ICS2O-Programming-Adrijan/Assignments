@@ -985,7 +985,6 @@ function scene:show( event )
         -----------------------------------------------------------------------------------------
 
         -- Listening for the usage of the joystick
-        analogStick:addEventListener( "touch", Movement )
         Runtime:addEventListener("enterFrame", RuntimeEvents)
         Runtime:addEventListener("enterFrame", LeftToRightGate)
         Runtime:addEventListener("enterFrame", RightToLeftGate)
@@ -1001,12 +1000,18 @@ function scene:show( event )
         --JOYSTICK 
         ------------------------------
         -- Creating Joystick
-        analogStick = joystick.new( 50, 75 ) 
+        analogStick =
+        joystick.new(
+        50, 75 ) 
         -- Setting Position
         analogStick.x = 125
         analogStick.y = display.contentHeight - 125
         -- Changing transparency
         analogStick.alpha = 0.5
+
+
+        analogStick:addEventListener( "touch", Movement )
+
     end
 end  --function scene:show( event )
 
